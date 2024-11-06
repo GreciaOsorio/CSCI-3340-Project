@@ -1,3 +1,9 @@
+import environ
+
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
+
 """
 Django settings for test project.
 
@@ -20,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)77k6!j4c0^8%s1v7v2+ppvjw93lk=p)k13kv!(&y6bnzo1zu$'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -77,10 +83,10 @@ WSGI_APPLICATION = 'test.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': '3340database',
-        'USER': 'root',
-        'PASSWORD': '62909@Lylu',
-        'HOST': 'localhost',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
         'PORT': '3306',       
     }
 }
