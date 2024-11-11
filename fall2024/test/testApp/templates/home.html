@@ -1,24 +1,17 @@
 {%extends 'base.html'%}
 {%block content%}
+{%load static%}
 
 
-<div class = "col-md-6 offset-md-3">
-    <h1>Login</h1>
-    <form method = "POST" action = "{%url 'home'%}">
-        {% csrf_token %}
-        <form>
-            <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-              <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="mb-3">
-              <label for="exampleInputPassword1" class="form-label">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-    </form>
-</div>
+<section class="hero-section">
+  <div class="hero-text">
+      <h1>Organize together,<br> <span>achieve together</span></h1>
+      <p>Keep your team’s tasks in their perfect Cubby.</p>
+      <a href="#" class="btn">Get started</a>
+  </div>
+  <div class="hero-image">
+      <img src="{% static 'images/hero-image.png' %}" alt="Hero Image">
+  </div>
+</section>
 
 {%endblock%}
