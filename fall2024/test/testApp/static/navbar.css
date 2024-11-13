@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.navbar-toggler-icon{
+    color: #F7BB5B !important;
+}
+.brand-name{
+    color: #F7BB5B;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.home,.contact{
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+}
+
+.button-log-in{
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    background-color: rgba(247,187,91,0.4);
+    border-radius: 100px;
+    color: black;
+    padding: 10px 25px;
+    text-align: end;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 5px;
+    cursor: pointer;
+
+}
+.button-log-in:hover{
+    background-color: #F7BB5B;
+    color: white;
+    text-decoration: none;
+}
+
+.button-sign-up{
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    background-color: #F7BB5B;
+    border-radius: 100px;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 5px;
+    cursor: pointer;
+}
+.button-sign-up:hover{
+    text-decoration: none;
+    color: white;
+}
