@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
-      <img src= "{% static 'images/logo.png' %}" alt="Logo" width="40" height="35" class="d-inline-block align-text-top">
+      <img src= "{% static 'images/logo.png' %}" alt="Logo" width="40" height="35" class="d-inline-block align-text-middle">
       <span class="brand-name">Cubby</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,7 @@
         </li>
       </ul>
     </div>
-    <a href="#" class="button-sign-up">Sign Up</a>
+    <a href="{% url 'signup' %}" class="button-sign-up">Sign Up</a>
     <a href="#" class="button-log-in">Log In</a>   
 
   </div>
