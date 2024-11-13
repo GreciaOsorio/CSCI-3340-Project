@@ -32,7 +32,7 @@ body {
     color: #666;
 }
 
-.btn {
+.get-started {
     display: inline-block;
     margin-top: 20px;
     padding: 10px 20px;
@@ -42,7 +42,7 @@ body {
     border-radius: 100px;
     font-weight: bold;
 }
-.btn:hover{
+.get-started:hover{
     background-color:  rgba(247,187,91,0.4);
     border-color: rgba(247,187,91,0.4);
 }
