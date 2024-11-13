@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active home" aria-current="page" href="#">Home</a>
+          <a class="nav-link active home" aria-current="page" href="{% url 'home' %}">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link contact" href="#">Contact Us</a>
@@ -20,7 +20,7 @@
       </ul>
     </div>
     <a href="{% url 'signup' %}" class="button-sign-up">Sign Up</a>
-    <a href="#" class="button-log-in">Log In</a>   
+    <a href="{% url 'login' %}" class="button-log-in">Log In</a>   
 
   </div>
 </nav>
