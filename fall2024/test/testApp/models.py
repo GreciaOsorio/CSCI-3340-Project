@@ -5,7 +5,7 @@ from django.utils import timezone
 # Create your models here.
 class UserProfile(models.Model):
     USER_TYPES = [
-        ('creator', 'Project Creator'),
+        ('manager', 'Project Manager'),
         ('teammate', 'Project Teammate')
     ]
     # One user correlates to one user profile.
@@ -27,7 +27,7 @@ class Project(models.Model):
     p_created_date = models.DateTimeField(editable=False)
     p_modified_date = models.DateTimeField()
     p_due_date = models.DateTimeField()
-    p_creator = models.ForeignKey(
+    p_manager = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='created_projects'
@@ -80,7 +80,7 @@ class Task(models.Model):
         choices=STATUS_CHOICES,
         default='pending'
     )
-    t_creator = models.ForeignKey(
+    t_manager = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='created_tasks'

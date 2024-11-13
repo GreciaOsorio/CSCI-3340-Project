@@ -2,45 +2,64 @@
 {% block content %}
 {% load static %}
 
+{% comment %} Login form that properly validates a user's login + notifies if login info is invalid. {% endcomment %}
 <div class="container h-100">
     <div class="d-flex justify-content-center h-100">
         <div class="user_card">
             <div class="d-flex justify-content-center">
-                <h3 id="form-title" style="font-weight: 700;">Log In</h3>
+                <h3 id="form-title" style="font-weight: 700;">Login</h3>
             </div>
             <div class="d-flex justify-content-center form_container">
-
                 <form method="POST" action="">
+                    {% csrf_token %}
                     
-                    <div class="form-group mb-2">
-                        <label for="id_email" style="font-weight: 500;">Email Address</label>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="form-group mb-3">
+                        <label for="id_username" style="font-weight: 500;">Username</label>
                         <div class="input-group">
                             <div class="input-group-append">
-                                <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
                             </div>
-                            {{ form.email }}
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="alert alert-danger mt-1">
+                                    {{ form.username.errors }}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                     
                     <div class="form-group mb-2">
-                        <label for="id_password1" style="font-weight: 500;">Password</label>
+                        <label for="id_password" style="font-weight: 500;">Password</label>
                         <div class="input-group">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                             </div>
-                            {{ form.password1 }}
+                            {{ form.password }}
+                            {% if form.password.errors %}
+                                <div class="alert alert-danger mt-1">
+                                    {{ form.password.errors }}
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
 
                     <div class="login_container">
-                        <input class="btn login_btn" type="submit" style="font-weight: 500;" value="Log In">
+                        <input class="btn login_btn" type="submit" style="font-weight: 500;" value="Login">
                     </div>
                 </form>
             </div>
 
             <div class="mt-4">
                 <div class="d-flex justify-content-center links">
-                    New to Cubby? <a href="#" class="ml-2">Sign Up</a>
+                    Don't have an account? <a href="{% url 'signup' %}" class="ml-2">Sign Up</a>
                 </div>
             </div>
         </div>
@@ -49,19 +68,19 @@
 
 <script>
     // Setting placeholder values via JavaScript
-    var form_fields = document.getElementsByTagName('input');
-    
-    form_fields[0].placeholder = 'Email';
-    form_fields[1].placeholder = 'Enter password';
+    var username_field = document.getElementById('id_username');
+    var password_field = document.getElementById('id_password');
 
-    // Add the 'form-control' class only to text, email, and password fields
-    for (var i = 0; i < form_fields.length; i++) {
-        if (form_fields[i].type === 'text' || form_fields[i].type === 'email' || form_fields[i].type === 'password') {
-            form_fields[i].classList.add('form-control');
+    username_field.placeholder = 'Username';
+    password_field.placeholder = 'Password';
+
+    // Add the 'form-control' class to form fields
+    var fields = [username_field, password_field];
+    fields.forEach(function(field) {
+        if (field && (field.type === 'text' || field.type === 'password')) {
+            field.classList.add('form-control');
         }
-    }
+    });
 </script>
 
-
 {% endblock %}
-
