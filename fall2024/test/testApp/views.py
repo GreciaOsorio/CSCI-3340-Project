@@ -28,3 +28,15 @@ def signup(request):
 
     context= {'form': form}
     return render (request, 'signup.html', context)
+
+def login(request):
+    form = CreateUserForm()
+    if request.method == "POST":
+        form = CreateUserForm(request.POST)
+        if form.is_valid:
+            form.save()
+
+
+
+    context= {'form': form}
+    return render (request, 'login.html', context)
