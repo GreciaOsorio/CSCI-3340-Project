@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+{% comment %} Signup form that validates/ensures optimal security for each user. {% endcomment %}
+<div class="container h-100">
+    <div class="d-flex justify-content-center h-100">
+        <div class="user_card">
+            <div class="d-flex justify-content-center">
+                <h3 id="form-title" style="font-weight: 700;">Sign Up</h3>
+            </div>
+            <div class="d-flex justify-content-center form_container">
+
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group mb-3">
+                        <label for="id_username" style="font-weight: 500;">Your Name</label>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="alert alert-danger mt-1">
+                                    {{ form.username.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-2">
+                        <label for="id_email" style="font-weight: 500;">Email Address</label>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+                            </div>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="alert alert-danger mt-1">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-2">
+                        <label for="id_password1" style="font-weight: 500;">Password</label>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="alert alert-danger mt-1">
+                                    {{ form.password1.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-2">
+                        <label for="id_password2" style="font-weight: 500;">Re-enter Password</label>
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            </div>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="alert alert-danger mt-1">
+                                    {{ form.password2.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label style="font-weight: 500;">What role will you have?</label>
+                        <div class="form-check">
+                            {{ form.user_type }}
+                            {% if form.user_type.errors %}
+                                <div class="alert alert-danger mt-1">
+                                    {{ form.user_type.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="login_container">
+                        <input class="btn login_btn" type="submit" style="font-weight: 500;" value="Create Account">
+                    </div>
+                </form>
+            </div>
+
+            <div class="mt-4">
+                <div class="d-flex justify-content-center links">
+                    Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Setting placeholder values via JavaScript
+    var form_fields = document.getElementsByTagName('input');
+    
+    // Skip the CSRF token input and radio buttons when setting placeholders
+    var username_field = document.getElementById('id_username');
+    var email_field = document.getElementById('id_email');
+    var password1_field = document.getElementById('id_password1');
+    var password2_field = document.getElementById('id_password2');
+
+    username_field.placeholder = 'Username';
+    email_field.placeholder = 'Email';
+    password1_field.placeholder = 'Enter password';
+    password2_field.placeholder = 'Re-enter Password';
+
+    // Add the 'form-control' class to form fields
+    var fields = [username_field, email_field, password1_field, password2_field];
+    fields.forEach(function(field) {
+        if (field && (field.type === 'text' || field.type === 'email' || field.type === 'password')) {
+            field.classList.add('form-control');
+        }
+    });
+</script>
+
+{% endblock %}
