@@ -3,14 +3,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.contrib import messages
 from .forms import SignUpForm, LoginForm
-from .models import UserProfile
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-
+from .models import UserProfile, Project
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect #check why we have to keep using these if they are supposed to be automatic 
 
 
 # Create your views here.
 def home(request):
     return render(request, 'home.html', {})
+
 
 @csrf_protect
 def signup_view(request):
@@ -41,99 +41,50 @@ def signup_view(request):
     context = {'form': form}
     return render(request, 'signup.html', context)
 
+#helper
+def prepare_dashboard_context(user, is_manager):
+    if is_manager:
+        projects = Project.objects.filter(p_manager=user)
+        project_heading = "(Manager) Your projects:"
+        template_name = 'managerDashboard.html'
+    else:
+        projects = Project.objects.filter(p_members=user)
+        project_heading = "(Teammate) Your projects:"
+        template_name = 'teammateDash.html'
+    
+    context = {
+        'name': user.username,
+        'projects': projects,
+        'project_heading': project_heading,
+    }
+    return context, template_name
 
-from .models import Project
 @csrf_protect
 @ensure_csrf_cookie #ensures token is available for form, helps if youre doing a lot of testing 
 def login_view(request):
-    if request.method == 'POST':
+    if request.method == 'POST': 
         form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            if user is not None: 
+            
+            if user is not None:
                 # This messes with your Django admin login (logs you out), but why?
-                # login(request, user)
+                #call function here for creating user context 
+                login(request, user)
                 messages.success(request, f'Successful login for: {username}.')
                 
-                login(request, user)
-
+                # Determine user type and prepare dashboard
                 user_type = user.userprofile.user_type
-                
-                if user_type == 'manager':
-                    user = request.user
-                    projects = Project.objects.filter(p_manager=user)
-                    project_heading = "(Manager) Your projects:"
-                    context = {
-                    'name': user.username,
-                    'projects': projects,
-                    'project_heading': project_heading,
-                    }
-                    return render(request, 'managerDashboard.html', context)
-                
-                else:     
-                    user = request.user
-                    projects = Project.objects.filter(p_members=user)
-                    project_heading = "(Teammate) Your projects:"
-                    context = {
-                    'name': user.username,
-                    'projects': projects,
-                    'project_heading': project_heading,
-                    } 
-                    return render(request, 'teammateDash.html', context)
+                is_manager = user_type == 'manager' #checks if user is manager otherwise itll 'else' to teammate 
+                context, template_name = prepare_dashboard_context(request.user, is_manager)
                             # If our user w/ entered info exists in our database...
+                return render(request, template_name, context)
             else: # Same here, our login success message shows in Django admin (make sure to refresh page).
+
                 messages.error(request, 'Invalid username or password.')
     else:
         form = LoginForm()
 
-    context = {'form': form}
-    return render(request, 'login.html', context)
-
-# @csrf_protect
-# def dashboard(request):
-#     user = request.user
-#     user_type = user.userprofile.user_type
-    
-#     context = {
-#         'name': user.username,
-#         'projects': projects,
-#         'project_heading': project_heading,
-#     }
-    
-#     if user_type == 'manager':
-#         projects = Project.objects.filter(p_manager=user)
-#         project_heading = "(Manager) Your projects:"
-#         return render(request, 'managerDashboard.html', context)
-#     else:
-#         projects = Project.objects.filter(p_members=user)
-#         project_heading = "(Teammate) Your projects:"
-#         return render(request, 'teammateDashboard.html', context)
-
-
-# def managerDashboard(request):
-#     user = request.user
-#     projects = Project.objects.filter(p_manager=user)
-#     project_heading = "(Manager) Your projects:"
-
-#     context = {
-#         'name': user.username,
-#         'projects': projects,
-#         'project_heading': project_heading,
-#     }
-#     return render(request, 'managerDashboard.html', context)
-
-
-# def teammateDashboard(request):
-#     user = request.user
-#     projects = Project.objects.filter(p_members=user)
-#     project_heading = "(Teammate) Your projects:"
-
-#     context = {
-#         'name': user.username,
-#         'projects': projects,
-#         'project_heading': project_heading,
-#     }
-#     return render(request, 'teammateDashboard.html', context)
-
+    return render(request, 'login.html', {'form': form})
