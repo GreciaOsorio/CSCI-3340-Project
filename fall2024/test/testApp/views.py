@@ -47,7 +47,7 @@ def prepare_dashboard_context(user, is_manager):
     if is_manager:
         projects = Project.objects.filter(p_manager=user)
         project_heading = "(Manager) Your projects:"
-        template_name = 'managerDashboard.html'
+        template_name = 'managerDash.html'
     else:
         projects = Project.objects.filter(p_members=user)
         project_heading = "(Teammate) Your projects:"
@@ -74,18 +74,34 @@ def login_view(request):
                 # Call function here for creating user context.
                 login(request, user)
                 messages.success(request, f'Successful login for: {username}.')
-                # Determine user type and prepare their dashboard.
+                # Determine user type and redirect to their dashboard.
                 user_type = user.userprofile.user_type
-                is_manager = user_type == 'manager' # Checks if user is a manager. Otherwise, it'll 'else' to teammate. 
-                context, template_name = prepare_dashboard_context(request.user, is_manager)
-                # If our user w/ entered info exists in our database...
-                return render(request, template_name, context)
+                if user_type == 'manager':
+                    return redirect('managerDash')  # Redirect to manager dashboard
+                elif user_type == 'teammate':
+                    return redirect('teammateDash')  # Redirect to teammate dashboard
+                
             else: # Same here, our login success message shows in Django admin (make sure to refresh page).
                 messages.error(request, 'Invalid username or password.')
     else:
         form = LoginForm()
 
     return render(request, 'login.html', {'form': form})
+
+@login_required
+def manager_dashboard(request):
+    if request.user.userprofile.user_type != 'manager':
+        raise PermissionDenied
+    context, template_name = prepare_dashboard_context(request.user, True)
+    return render(request, template_name, context)
+
+
+@login_required
+def teammate_dashboard(request):
+    if request.user.userprofile.user_type != 'teammate':
+        raise PermissionDenied
+    context, template_name = prepare_dashboard_context(request.user, False)
+    return render(request, template_name, context)
 
 
 # All Cubby users can view their project lists and specific project details.
