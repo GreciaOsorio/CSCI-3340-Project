@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Task</title>
+</head>
+<body>
+    <h1>Update Task: {{ task.t_name }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label>Name:</label>
+            <input type="text" name="name" value="{{ task.t_name }}" required>
+        </p>
+        <p>
+            <label>Description:</label>
+            <textarea name="description" required>{{ task.t_description }}</textarea>
+        </p>
+        <p>
+            <label>Due Date:</label>
+            <input type="datetime-local" name="due_date" value="{{ task.t_due_date|date:'Y-m-d\TH:i' }}" required>
+        </p>
+        <p>
+            {% comment %} <label>Status:</label>
+            <select name="status" required>
+                {% for status, label in task.STATUS_CHOICES %}
+                <option value="{{ status }}" {% if status == task.t_status %}selected{% endif %}>
+                    {{ label }}
+                </option>
+                {% endfor %}
+            </select> {% endcomment %}
+        </p>
+        <p>
+            <label>Assignees:</label>
+            <select name="assignees" multiple required>
+                {% for user in assignees %}
+                <option value="{{ user.id }}" {% if user in task.t_assignees.all %}selected{% endif %}>
+                    {{ user.username }}
+                </option>
+                {% endfor %}
+            </select>
+        </p>
+        <button type="submit">Update Task</button>
+    </form>
+</body>
+</html>
