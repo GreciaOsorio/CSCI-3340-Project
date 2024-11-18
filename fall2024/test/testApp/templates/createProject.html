@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Project</title>
+</head>
+<body>
+    <h1>Create New Project</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label>Name:</label>
+            <input type="text" name="name" required>
+        </p>
+        <p>
+            <label>Description:</label>
+            <textarea name="description" required></textarea>
+        </p>
+        <p>
+            <label>Due Date:</label>
+            <input type="datetime-local" name="due_date" required>
+        </p>
+        <p>
+            <label>Team Members:</label>
+            <select name="members" multiple required>
+                {% for teammate in available_teammates %}
+                    <option value="{{ teammate.id }}">{{ teammate.username }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <button type="submit">Create Project</button>
+    </form>
+</body>
+</html>

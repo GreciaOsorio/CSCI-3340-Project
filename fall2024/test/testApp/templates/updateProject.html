@@ -1,0 +1,36 @@
+<!-- templates/todo/update_project.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Project</title>
+</head>
+<body>
+    <h1>Update Project: {{ project.p_name }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label>Name:</label>
+            <input type="text" name="name" value="{{ project.p_name }}" required>
+        </p>
+        <p>
+            <label>Description:</label>
+            <textarea name="description" required>{{ project.p_description }}</textarea>
+        </p>
+        <p>
+            <label>Due Date:</label>
+            <input type="datetime-local" name="due_date" value="{{ project.p_due_date|date:'Y-m-d\TH:i' }}" required>
+        </p>
+        <p>
+            <label>Members:</label>
+            <select name="members" multiple required>
+                {% for user in members %}
+                <option value="{{ user.id }}" {% if user in project.p_members.all %}selected{% endif %}>
+                    {{ user.username }}
+                </option>
+                {% endfor %}
+            </select>
+        </p>
+        <button type="submit">Update Project</button>
+    </form>
+</body>
+</html>
