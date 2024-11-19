@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Welcome back, {{ name }}!</h1>
+    <a href="{% url 'create_project' %}" class="button-create-project">Create New Project</a>
     <h3>{{ project_heading }}</h3>
     <ul>
         {% for project in projects %}
