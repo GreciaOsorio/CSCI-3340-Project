@@ -103,6 +103,11 @@ def teammate_dashboard(request):
     context, template_name = prepare_dashboard_context(request.user, False)
     return render(request, template_name, context)
 
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('home') 
+
 
 # All Cubby users can view their project lists and specific project details.
 @login_required

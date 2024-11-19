@@ -19,6 +19,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('signup/', views.signup_view, name='signup'),
     path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
     path('managerDash/', views.manager_dashboard, name='managerDash'), 
     path('teammateDash/', views.teammate_dashboard, name = 'teammateDash'),
     path('projects/', views.project_list_view, name='project_list'),
