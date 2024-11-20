@@ -35,7 +35,13 @@ def signup_view(request):
 
             # Signup success message shown in Django admin.
             messages.success(request, 'Account created successfully!')
-            return redirect('home') # Replace this with whatever screen we want to initially show our user after they signup.
+            login(request, user)
+            if user_type == 'manager':
+                    return redirect('managerDash')  # Redirect to manager dashboard
+            elif user_type == 'teammate':
+                    return redirect('teammateDash')  # Redirect to teammate dashboard
+            else: 
+                return redirect('home') # Replace this with whatever screen we want to initially show our user after they signup.
     else:
         form = SignUpForm()
 
