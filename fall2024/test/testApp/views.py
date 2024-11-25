@@ -52,7 +52,7 @@ def signup_view(request):
 def prepare_dashboard_context(user, is_manager):
     if is_manager:
         projects = Project.objects.filter(p_manager=user)
-        project_heading = "(Manager) Your projects:"
+        project_heading = "Your projects:"
         template_name = 'managerDash.html'
     else:
         projects = Project.objects.filter(p_members=user)
