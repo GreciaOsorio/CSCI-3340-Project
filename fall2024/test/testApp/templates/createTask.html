@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Task for {{ project.p_name }}</title>
+</head>
+<body>
+    <h1>Create New Task for {{ project.p_name }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            <label>Name:</label>
+            <input type="text" name="name" required>
+        </p>
+        <p>
+            <label>Description:</label>
+            <textarea name="description" required></textarea>
+        </p>
+        <p>
+            <label>Due Date:</label>
+            <input type="datetime-local" name="due_date" required>
+        </p>
+        <p>
+            <label>Assignees:</label>
+            <select name="assignees" multiple required>
+                {% for member in project_members %}
+                    <option value="{{ member.id }}">{{ member.username }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <button type="submit">Create Task</button>
+    </form>
+    
+    <a href="{% url 'project_detail' project.id %}">Back to Project</a>
+</body>
+</html>

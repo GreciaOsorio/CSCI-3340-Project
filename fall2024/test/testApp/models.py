@@ -52,7 +52,7 @@ class Project(models.Model):
         if not self.id:
             self.p_created_date = timezone.now()
         self.p_modified_date = timezone.now()
-        return super(User, self).save(*args, **kwargs)
+        return super(Project, self).save(*args, **kwargs)
 
     # Orders projects in the database based on their due dates (descending order).
     class Meta:
@@ -92,14 +92,14 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return f"{self.project.t_name} - {self.t_name}"
+        return f"{self.project.p_name} - {self.t_name}"
     
     # Used to properly update the date + time a task is updated.
     def save(self, *args, **kwargs):
         if not self.id:
-            self.created_date = timezone.now()
-        self.modified_date = timezone.now()
-        return super(User, self).save(*args, **kwargs)
+            self.t_created_date = timezone.now()
+        self.t_modified_date = timezone.now()
+        return super(Task, self).save(*args, **kwargs)
 
     # Orders tasks in the database based on their due dates (descending order).
     class Meta:

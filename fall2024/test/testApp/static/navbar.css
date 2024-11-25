@@ -54,3 +54,7 @@
     text-decoration: none;
     color: white;
 }
+
+.navbar-nav {
+    padding-left: 15px;
+}

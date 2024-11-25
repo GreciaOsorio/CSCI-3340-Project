@@ -1,16 +1,14 @@
-{%load static%}
+{% load static %}
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <img src= "{% static 'images/logo.png' %}" alt="Logo" width="40" height="35" class="d-inline-block align-text-middle">
+    <a class="navbar-brand" href="{% url 'home' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Logo" width="40" height="35" class="d-inline-block align-text-middle">
       <span class="brand-name">Cubby</span>
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <!-- we can collapse this -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link active home" aria-current="page" href="{% url 'home' %}">Home</a>
         </li>
@@ -19,8 +17,17 @@
         </li>
       </ul>
     </div>
-    <a href="{% url 'signup' %}" class="button-sign-up">Sign Up</a>
-    <a href="{% url 'login' %}" class="button-log-in">Log In</a>   
 
+    <div class="nav-buttons">
+      {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="button-log-out">Logout</a>
+
+      {% else %}
+        <a href="{% url 'signup' %}" class="button-sign-up">Sign Up</a>
+        <a href="{% url 'login' %}" class="button-log-in">Log In</a>
+      {% endif %}
+    </div>
   </div>
 </nav>
+
+
