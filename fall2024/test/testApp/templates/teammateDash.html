@@ -5,7 +5,7 @@
     <h3>{{ project_heading }}</h3>
     <ul>
         {% for project in projects %}
-            <li>{{ project.p_name }} - {{ project.p_description }}</li>
+            <li>{{ project.p_name }} - {{ project.p_description }}</li> 
         {% empty %}
             <li>No projects found.</li>
         {% endfor %}
