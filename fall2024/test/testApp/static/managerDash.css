@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    max-width: 1200px;
+    margin: auto;
+    height: 50vh;
+    gap: 10px;
+    background-color: #f8f5f1;
+    text-align: center;
+}
+
+.main-text h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+.main-text h1 span{
+    color: #f5a623;
+}
+
+.main-text p1 {
+    font-size: 1.25em;
+    color: #333;
+}
+
+.button-create-project {
+    display: block;
+    margin: 20px auto;
+    width: fit-content;
+    padding: 10px 20px;
+    background-color: #f5a623;
+    color: white;
+    text-decoration: none;
+    border-radius: 100px;
+    font-weight: bold;
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-create-project:hover {
+    text-decoration: none;
+    color: white;
+    background-color:  rgba(247,187,91,0.4);
+    border-color: rgba(247,187,91,0.4);
+}
+
+.content-wrapper {
+    background-color: #ffffff;
+    width: 100%;
+    min-height: 100vh;
+    margin-top: 0;
+    padding-top: 50px;
+}
+.project-view {
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    max-width: 1200px;
+    margin: auto;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+.project-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    color: #333;
+    text-align: center;
+}
+.project-text h3 {
+    flex: 1;
+    margin: 0;
+    min-width: 200px;
+    font-size: 2em;
+    font-weight: bold;
+}
+.project-list-container {
+    flex: 2;
+}
+
+.project-list-container ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-list-container li {
+    margin-bottom: 10px; /* space between list items */
+}
+

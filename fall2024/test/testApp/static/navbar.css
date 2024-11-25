@@ -55,6 +55,28 @@
     color: white;
 }
 
+.button-log-out{
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    background-color: rgba(247,187,91,0.4);
+    border-radius: 100px !important;
+    color: black;
+    padding: 10px 25px;
+    text-align: end;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 4px 5px;
+    cursor: pointer;
+}
+
+.button-log-out:hover{
+    background-color: #F7BB5B;
+    color: white;
+    text-decoration: none;
+}
+
 .navbar-nav {
     padding-left: 15px;
 }
+
