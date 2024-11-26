@@ -275,8 +275,10 @@ def delete_project_view(request, id):
         # Delete the project and related tasks.
         project.delete()
         messages.success(request, f'Project "{project_name}" has been deleted.')
+        # Once deleted, return to the user's dashboard/project list page since current project has been deleted.
         return redirect('project_list')
     
+    # Show deletion confirmation page.
     return render(request, 'deleteProject.html', {'project': project})
 
 @login_required
@@ -294,6 +296,7 @@ def delete_task_view(request, id, t_id):
         # Delete the task.
         task.delete()
         messages.success(request, f'Task "{task_name}" has been deleted.')
+        # Once deleted, return to the deleted task's project page.
         return redirect('project_detail', id=project.id)
     
     return render(request, 'deleteTask.html', {'project': project, 'task': task})
