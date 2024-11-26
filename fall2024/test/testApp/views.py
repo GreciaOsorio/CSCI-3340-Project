@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect #check why we have to keep using these if they are supposed to be automatic 
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect # check why we have to keep using these if they are supposed to be automatic 
 from django.utils import timezone
 from .forms import SignUpForm, LoginForm
 from .models import UserProfile, Project, Task
@@ -145,13 +145,13 @@ def project_detail_view(request, id):
     return render(request, 'projectDetail.html', context)
 
 
-# Unique to managers: can create, update, and delete projects/tasks.
+# Unique to managers: can create, update, and delete projects + tasks.
 @login_required
 def create_project_view(request):
     if request.user.userprofile.user_type != 'manager':
         raise PermissionDenied
     
-    # Get all users who are teammates (in theory, should work, but it's not).
+    # Get all users who are teammates.
     available_teammates = User.objects.filter(
         userprofile__user_type='teammate'
     )
@@ -180,7 +180,13 @@ def update_project_view(request, id):
         raise PermissionDenied
     
     project = get_object_or_404(Project, id=id, p_manager=request.user)
-    
+
+    # Get all users who are teammates.
+    available_teammates = User.objects.filter(
+        userprofile__user_type='teammate'
+    )
+
+    # If someone is removed from a project, their tasks should become unassigned (no teammate assigned to task).
     if request.method == 'POST':
         project.p_name = request.POST['name']
         project.p_description = request.POST['description']
@@ -194,8 +200,10 @@ def update_project_view(request, id):
     
     context = {
         'project': project,
-        'members': User.objects.all()
+        'members': User.objects.all(),
+        'available_teammates': available_teammates
     }
+
     return render(request, 'updateProject.html', context)
 
 @login_required
@@ -204,7 +212,7 @@ def create_task_view(request, id):
         raise PermissionDenied
     
     project = get_object_or_404(Project, id=id, p_manager=request.user)
-    # Show all the users are currently working on the task's related project.
+    # Show all the users who are currently working on the task's related project.
     project_members = project.p_members.all()
 
     if request.method == 'POST':
@@ -232,6 +240,8 @@ def update_task_view(request, id, t_id):
     
     project = get_object_or_404(Project, id=id, p_manager=request.user)
     task = get_object_or_404(Task, id=t_id, project=project)
+
+    project_members = project.p_members.all()
     
     if request.method == 'POST':
         task.t_name = request.POST['name']
@@ -247,13 +257,47 @@ def update_task_view(request, id, t_id):
     context = {
         'project': project,
         'task': task,
-        'assignees': User.objects.all()
+        'project_members': project_members
     }
     return render(request, 'updateTask.html', context)
 
-# Need to add views to delete projects AND tasks.
+@login_required
+def delete_project_view(request, id):
+    # Only managers can delete projects.
+    if request.user.userprofile.user_type != 'manager':
+        raise PermissionDenied
+    
+    # Ensure the user is the manager of this project.
+    project = get_object_or_404(Project, id=id, p_manager=request.user)
+    
+    if request.method == 'POST':
+        project_name = project.p_name
+        # Delete the project and related tasks.
+        project.delete()
+        messages.success(request, f'Project "{project_name}" has been deleted.')
+        return redirect('project_list')
+    
+    return render(request, 'deleteProject.html', {'project': project})
 
+@login_required
+def delete_task_view(request, id, t_id):
+    # Only managers can delete tasks.
+    if request.user.userprofile.user_type != 'manager':
+        raise PermissionDenied
+    
+    # Ensure the user is the manager of the project containing this task.
+    project = get_object_or_404(Project, id=id, p_manager=request.user)
+    task = get_object_or_404(Task, id=t_id, project=project)
+    
+    if request.method == 'POST':
+        task_name = task.t_name
+        # Delete the task.
+        task.delete()
+        messages.success(request, f'Task "{task_name}" has been deleted.')
+        return redirect('project_detail', id=project.id)
+    
+    return render(request, 'deleteTask.html', {'project': project, 'task': task})
 
 # Unique to teammates (a.k.a project members, task assignees): can update the status of their assigned task(s).
 # what needs to be done here: update_task_status_view (for project members/assignees)
-# add url for it, too  
+# add url for it, too
