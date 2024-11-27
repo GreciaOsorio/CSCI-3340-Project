@@ -23,10 +23,10 @@
         <p>
             <label>Members:</label>
             <select name="members" multiple required>
-                {% for user in members %}
-                <option value="{{ user.id }}" {% if user in project.p_members.all %}selected{% endif %}>
-                    {{ user.username }}
-                </option>
+                {% for teammate in available_teammates %}
+                    <option value="{{ teammate.id }}" {% if teammate in project.p_members.all %}selected{% endif %}>
+                        {{ teammate.username }}
+                    </option>
                 {% endfor %}
             </select>
         </p>
