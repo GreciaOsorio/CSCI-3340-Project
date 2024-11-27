@@ -56,7 +56,7 @@ def prepare_dashboard_context(user, is_manager):
         template_name = 'managerDash.html'
     else:
         projects = Project.objects.filter(p_members=user)
-        project_heading = "(Teammate) Your projects:"
+        project_heading = "Your projects:"
         template_name = 'teammateDash.html'
     
     context = {
