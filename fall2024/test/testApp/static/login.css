@@ -31,14 +31,15 @@
     margin-top: 8%;
 
 }
-.login_btn {
+.login_btnn {
     width: 100%;
     background: #f7ba5b !important;
     color: white !important;
     border-radius: 100px;
+    margin-top: 5%;
 
 }
-.login_btn:focus {
+.login_btnn:focus {
     box-shadow: none !important;
     outline: 0px !important;
 }
@@ -53,5 +54,6 @@
     box-shadow: none !important;
     outline: 0px !important;
 }
-
-
+.input-group-text i {
+    font-size: 1.5rem;
+}
