@@ -12,6 +12,15 @@
         <li class="nav-item">
           <a class="nav-link active home" aria-current="page" href="{% url 'home' %}">Home</a>
         </li>
+        {% if user.is_authenticated %}
+          {% if user.userprofile.user_type == 'manager' %}
+            <li class="nav-item">
+              <a class="nav-link active home" aria-current="page" href="{% url 'managerDash' %}">Dashboard</a>
+            </li>
+          {% else %}
+          <a class="nav-link active home" aria-current="page" href="{% url 'teammateDash' %}">Dashboard</a>
+          {% endif %}
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link contact" href="#">Contact Us</a>
         </li>
