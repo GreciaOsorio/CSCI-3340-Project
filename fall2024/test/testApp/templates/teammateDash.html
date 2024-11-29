@@ -1,13 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Welcome back, {{ name }}!</h1>
-    <h3>{{ project_heading }}</h3>
-    <ul>
-        {% for project in projects %}
-            <li>{{ project.p_name }} - {{ project.p_description }}</li> 
-        {% empty %}
-            <li>No projects found.</li>
-        {% endfor %}
-    </ul>
+
+<section class= "main-section">
+    <div class="main-text">
+        <h1>Welcome back, <span>{{ name }}</span>!</h1>
+    </div>
+</section>
+            
+      
+
+    <div class= "content-wrapper">
+        <section class="project-view">
+            <div class="project-text">
+                <h3>{{ project_heading }}</h3>
+                <div class="project-list-container">
+                    <ul>
+                        {% for project in projects %}
+                            <li>{{ project.p_name }} - {{ project.p_description }}</li>
+                        {% empty %}
+                            <li>No projects found.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
 {% endblock %}
