@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+*, body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+#project-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    margin-top: 20%;
+}
+
+.parent-btn-container {
+    display: flex;
+    margin-top: 20px;
+    width: 100%; /* Ensure the container spans the full width */
+    box-sizing: border-box;
+    gap: 20px;
+    justify-content: space-between;
+}
+.spacer {
+    flex-grow: 1; /* This takes up all available space and pushes the buttons right */
+}
+.create-btn, .cancel-btn{
+    border-radius: 100px;
+    padding: 10px 30px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    flex-shrink: 0;
+    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+
+}
+.create-btn{
+    margin-right: -200px;
+    background: #f7ba5b !important;
+    color: white !important;
+
+}
+.cancel-btn{
+    margin-left: -200px;
+    background-color: rgba(247,187,91,0.4);
+    color: black;
+}
+
+.cancel-btn:hover {
+    background-color: #F7BB5B;
+    color: white;
+    text-decoration: none;
+}
+
+
+.project-control {
+    border-radius: 30px;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    
+}
+
+.project-name {
+    margin-top: 5rem;
+}
+
+#create-project-page input[type="text"], input[type="datetime-local"], textarea, select {
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    padding: 0.75rem;
+    width: 200%;
+    font-size: 1rem;
+    margin-left: -50%; 
+
+}
+
+#create-project-page label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block; /* Ensure the label takes up full width */
+    margin-left: -48%;
+}
+
+#create-project-page .ccontainer {
+    width: 100%; /* Make sure the container spans the full width */
+    padding: 0;
+}
+
+#create-project-page .d-flex {
+    width: 100%; /* Ensure that this container takes the full available space */
+}
+.project_card {
+    width: 100%; /* Ensure the project card is as wide as possible */
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Ensure it uses full width */
+}
