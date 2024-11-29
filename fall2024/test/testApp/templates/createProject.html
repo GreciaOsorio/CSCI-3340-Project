@@ -33,12 +33,12 @@
                                     {% endfor %}
                                 </select>
                             </p>
+                            <div class="parent-btn-container">
+                                <div class="spacer"></div> 
+                                <a href="{% url 'managerDash' %}" class="cancel-btn">Cancel</a>
+                                <button class="btn create-btn" type="submit">Create</button>
+                            </div>
                         </form>
-                        <div class="parent-btn-container">
-                            <div class="spacer"></div> 
-                            <a href="{% url 'managerDash' %}" class="cancel-btn">Cancel</a>
-                            <button class="btn create-btn" type="submit">Create</button>
-                        </div>
                     </div>
                 </div>
             </div>
