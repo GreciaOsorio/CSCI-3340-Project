@@ -58,7 +58,7 @@
 .button-log-out{
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    background-color: rgba(247,187,91,0.4);
+    background-color: rgba(247,187,91,0.4) !important;
     border-radius: 100px !important;
     color: black;
     padding: 10px 25px;
@@ -71,7 +71,7 @@
 }
 
 .button-log-out:hover{
-    background-color: #F7BB5B;
+    background-color: #F7BB5B !important;
     color: white;
     text-decoration: none;
 }
