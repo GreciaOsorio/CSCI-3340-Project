@@ -7,7 +7,12 @@
             <div class="container h-100">
                 <div class="d-flex justify-content-center h-100">
                     <div class="project-card">
-                        <h1 id="project-title" >Create New Project</h1>
+                        <div class="title-container">
+                            <div class="icon-container">
+                                <i class="fas fa-lightbulb bulb"></i>
+                            </div>
+                            <h1 id="project-title">Create A<br> New Project!</h1>
+                        </div>
                         <form method="POST">
                             {% csrf_token %}
 
@@ -23,11 +28,11 @@
                             </p>
                             <p>
                                 <label for="due_date">Due Date:</label>
-                                <input type="datetime-local" name="due_date" class="project-control" required>
+                                <input class="timeBox" type="datetime-local" name="due_date" class="project-control" required>
                             </p>
                             <p>
                                 <label for="team_members">Team Members:</label>
-                                <select name="members" class="project-control" multiple required>
+                                <select name="members" class="project-control members" multiple required>
                                     {% for teammate in available_teammates %}
                                         <option value="{{ teammate.id }}">{{ teammate.username }}</option>
                                     {% endfor %}

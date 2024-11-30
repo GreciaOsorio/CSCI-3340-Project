@@ -4,14 +4,44 @@
 *, body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
-    padding: 0;
+    padding-bottom: 0;
+    
 }
 
+.title-container {
+    text-align: center; /* Center-align the title and icon */
+    margin-top: 50px; /* Adjust as needed */
+}
+
+.icon-container {
+    display: flex;
+    justify-content: center;
+}
 
 #project-title {
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     margin-top: 20%;
+    text-align: center; 
+    margin-top: 10px; 
+}
+
+.bulb{
+    color: #f7ba5b;
+    font-size: 40px;
+    text-shadow: 0 0 5px rgba(253, 221, 171, 0.4), 
+    0 0 20px rgba(247, 186, 91, 0.6), 
+    0 0 30px rgba(247, 186, 91, 0.8); /* Multi-layer glow effect */
+    animation: glow-text 2s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(247, 186, 91, 0.4));
+    }
+    100% {
+        filter: drop-shadow(0 0 15px rgba(247, 186, 91, 0.8));
+    }
 }
 
 .parent-btn-container {
@@ -43,12 +73,12 @@
 }
 .cancel-btn{
     margin-left: -200px;
-    background-color: rgba(247,187,91,0.4);
+    background-color: rgba(247,187,91,0.4) !important;
     color: black;
 }
 
 .cancel-btn:hover {
-    background-color: #F7BB5B;
+    background-color: #F7BB5B !important;
     color: white;
     text-decoration: none;
 }
@@ -56,10 +86,19 @@
 
 .project-control {
     border-radius: 30px;
-    width: 100%;
+    width: 200%;
     padding: 0.75rem;
     margin-top: 0.5rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+    transition: box-shadow 0.3s ease; /* Smooth transition */
     
+}
+
+
+
+.project-control.members {
+    border-radius: 8px;
+    width: 100%;
 }
 
 .project-name {
@@ -97,4 +136,8 @@
     display: flex;
     flex-direction: column;
     align-items: stretch; /* Ensure it uses full width */
+}
+
+input.timeBox{
+    width: 85%;
 }

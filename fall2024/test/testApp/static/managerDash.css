@@ -89,17 +89,59 @@ body {
     font-size: 2em;
     font-weight: bold;
 }
+
 .project-list-container {
     flex: 2;
 }
 
+/* Style the list items */
 .project-list-container ul {
-    list-style-type: none;
+    list-style: none; /* Remove default list bullets */
     padding: 0;
-    margin: 0;
+}
+  
+.project-list-container ul li {
+    display: inline-block; /* Keep elements inline */
+    width: 700px; /* Set a consistent width */
+    height: 50px; /* Set a consistent height */
+    padding: 10px; /* Adjust padding as needed */
+    margin: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+    line-height: 30px; /* Adjust for vertical centering of text */
+    overflow: hidden; /* Ensure content doesn’t overflow the box */
+    text-overflow: ellipsis; /* Add ellipsis for long text */
 }
 
-.project-list-container li {
-    margin-bottom: 10px; /* space between list items */
+/* Optional: Adjust font size or make responsive */
+@media (max-width: 600px) {
+    .project-list-container ul li {
+        width: 100px; /* Smaller boxes for smaller screens */
+        height: 40px;
+        font-size: 14px;
+    }
 }
+
+
+/* Hover effect for the boxes */
+.project-list-container ul li:hover {
+    transform: translateY(-5px); /* Slightly lifts the box */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhances shadow on hover */
+    background-color: #fff; /* Slightly brighter background */
+}
+
+/* Ensure the text is styled nicely */
+.project-list-container ul li {
+    font-size: 16px; /* Adjust font size */
+    color: #333; /* Darker text color */
+    text-decoration: none; /* Removes underline from links */
+}
+
+  
+
 
