@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
+{%block content%}
+{%load static%}
 <head>
     <title>{{ project.p_name }}</title>
 </head>
@@ -28,4 +29,4 @@
     {% endfor %}
     </ul>
 </body>
-</html>
+{% endblock %}
