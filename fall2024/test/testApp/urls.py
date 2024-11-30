@@ -31,4 +31,7 @@ urlpatterns = [
     path('projects/<int:id>/delete/', views.delete_project_view, name='delete_project'),
     path('projects/<int:id>/tasks/<int:t_id>/delete/', views.delete_task_view, name='delete_task'),
     # This is pending: path('projects/teammate/<int:id>/tasks/<int:t_id>/update/', views.update_task_status_view, name='update_task_status')
+    path('projects/teammate/<int:id>/tasks/<int:t_id>/update/', views.update_task_status_view, name='update_task_status'),
+
+
 ]

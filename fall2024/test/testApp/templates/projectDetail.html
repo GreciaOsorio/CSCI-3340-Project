@@ -24,6 +24,21 @@
             <a href="{% url 'update_task' project.id task.id %}">Edit</a>
             <a href="{% url 'delete_task' project.id task.id %}" class="delete-btn">Delete Task</a>
             {% endif %}
+            
+            {% if user_type == 'teammate' %}
+            <form method="POST" action="{% url 'update_task_status' id=project.id t_id=task.id %}">
+                {% csrf_token %}
+                <select name="status">
+                    {% for value, display in task.STATUS_CHOICES %}
+                    <option value="{{ value }}" {% if task.t_status == value %}selected{% endif %}>
+                        {{ display }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Update</button>
+            </form>
+            {% endif %}
+            
         </li>
     {% endfor %}
     </ul>

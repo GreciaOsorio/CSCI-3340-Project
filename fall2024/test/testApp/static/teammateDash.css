@@ -92,3 +92,13 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhances shadow on hover */
     background-color: #fff; /* Slightly brighter background */
 }
+
+.project-link {
+    display: block;
+    color: inherit; 
+    text-decoration: none; 
+}
+
+.project-link:hover {
+    text-decoration: none; 
+}
