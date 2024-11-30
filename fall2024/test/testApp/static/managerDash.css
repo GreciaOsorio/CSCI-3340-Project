@@ -142,6 +142,17 @@ body {
     text-decoration: none; /* Removes underline from links */
 }
 
+.project-link {
+    display: block;
+    color: inherit; 
+    text-decoration: none; 
+}
+
+.project-link:hover {
+    text-decoration: none; 
+}
+
+
   
 
 

@@ -15,7 +15,11 @@
             <div class="project-list-container">
                 <ul>
                     {% for project in projects %}
-                        <li>{{ project.p_name }} - {{ project.p_description }}</li>
+                    <li>
+                        <a href="{% url 'project_detail' project.id %}" class="project-link">
+                            {{ project.p_name }} - {{ project.p_description }}
+                        </a>
+                    </li>
                     {% empty %}
                         <li>No projects found.</li>
                     {% endfor %}
