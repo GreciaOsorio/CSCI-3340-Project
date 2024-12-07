@@ -173,7 +173,6 @@ def create_project_view(request):
     }
     return render(request, 'createProject.html', context)
 
-# If a project member is removed, their tasks should disappear (need to add this).
 @login_required
 def update_project_view(request, id):
     if request.user.userprofile.user_type != 'manager':
@@ -186,7 +185,7 @@ def update_project_view(request, id):
         userprofile__user_type='teammate'
     )
 
-    # If someone is removed from a project, their tasks should become unassigned (no teammate assigned to task).
+    # If someone is removed from a project, their tasks should become unassigned (no teammate assigned to task, need to add this).
     if request.method == 'POST':
         project.p_name = request.POST['name']
         project.p_description = request.POST['description']
