@@ -2,6 +2,11 @@
 <html>
 <head>
     <title>Create Task for {{ project.p_name }}</title>
+
+    {% comment %} Used for team member selection. {% endcomment %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
     <h1>Create New Task for {{ project.p_name }}</h1>
@@ -21,7 +26,7 @@
         </p>
         <p>
             <label>Assignees:</label>
-            <select name="assignees" multiple required>
+            <select name="assignees" multiple="multiple" class="js-example-basic-multiple" style="width: 100%;">
                 {% for member in project_members %}
                     <option value="{{ member.id }}">{{ member.username }}</option>
                 {% endfor %}
@@ -29,6 +34,15 @@
         </p>
         <button type="submit">Create Task</button>
     </form>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2({
+                placeholder: "Select assignees",
+                allowClear: true // Allows clearing of selected members.
+            });
+        });
+    </script>
     
     <a href="{% url 'project_detail' project.id %}">Back to Project</a>
 </body>
