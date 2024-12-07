@@ -136,19 +136,23 @@ def project_list_view(request):
 
 @login_required
 def project_detail_view(request, id):
-    if request.user.userprofile.user_type == 'manager':
-        project = get_object_or_404(Project, id=id, p_manager=request.user)
-    else:
-        project = get_object_or_404(Project, id=id, p_members=request.user)
+    project = get_object_or_404(Project, id=id)
     
+    # Check if the user is a member of the project.
+    if request.user not in project.p_members.all() and request.user != project.p_manager:
+        raise PermissionDenied
+    # Get the user's profile type.
+    user_type = request.user.userprofile.user_type
+    # Get all tasks for this project.
     tasks = project.tasks.all()
+    
     context = {
         'project': project,
         'tasks': tasks,
-        'user_type': request.user.userprofile.user_type
+        'user_type': user_type,
+        'current_user': request.user
     }
     return render(request, 'projectDetail.html', context)
-
 
 # Unique to managers: can create, update, and delete projects + tasks.
 @login_required
@@ -178,37 +182,58 @@ def create_project_view(request):
     }
     return render(request, 'createProject.html', context)
 
-# If a project member is removed, their tasks should disappear (need to add this).
+# When updating a project, we take into consideration removing teammates who have tasks assigned to them.
+# If the assignee was the only person working on a task, then their task becomes unassigned.
+# If the assignee was working on a task with other people, and there will still be remaining assigness after their removal, then they are simply removed from the assignee list.
 @login_required
 def update_project_view(request, id):
     if request.user.userprofile.user_type != 'manager':
         raise PermissionDenied
     
     project = get_object_or_404(Project, id=id, p_manager=request.user)
-
+    
     # Get all users who are teammates.
     available_teammates = User.objects.filter(
         userprofile__user_type='teammate'
     )
-
-    # If someone is removed from a project, their tasks should become unassigned (no teammate assigned to task).
+    
     if request.method == 'POST':
+        # Get the current and new members.
+        current_members = set(project.p_members.all())
+        new_member_ids = request.POST.getlist('members')
+        new_members = set(User.objects.filter(id__in=new_member_ids))
+        
+        # Find members being removed.
+        removed_members = current_members - new_members
+        
         project.p_name = request.POST['name']
         project.p_description = request.POST['description']
         project.p_due_date = request.POST['due_date']
-        # Debating if the two following lines are necessary...
         project.p_modified_date = timezone.now()
         project.save()
-        project.p_members.set(request.POST.getlist('members'))
-
+        
+        # Update project members.
+        project.p_members.set(new_members)
+        
+        # Handle tasks for removed members.
+        if removed_members:
+            for task in project.tasks.all():
+                # Get current task assignees.
+                current_assignees = set(task.t_assignees.all())
+                # Remove the members that were removed from the project.
+                removed_task_assignees = current_assignees.intersection(removed_members)
+                
+                if removed_task_assignees:
+                    task.t_assignees.remove(*removed_task_assignees)
+                    task.t_modified_date = timezone.now()
+                    task.save()
+        
         return redirect('project_detail', id=project.id)
     
     context = {
         'project': project,
-        'members': User.objects.all(),
         'available_teammates': available_teammates
     }
-
     return render(request, 'updateProject.html', context)
 
 @login_required
@@ -227,9 +252,12 @@ def create_task_view(request, id):
             t_description=request.POST['description'],
             t_due_date=request.POST['due_date'],
             t_manager=request.user
-        )
-        task.t_assignees.set(request.POST.getlist('assignees'))
-
+        )     
+        # Check if assignees were selected, since assigness are optional.
+        assignees = request.POST.getlist('assignees')
+        if assignees:
+            task.t_assignees.set(assignees)
+        
         return redirect('project_detail', id=project.id)
     
     context = {
@@ -252,11 +280,18 @@ def update_task_view(request, id, t_id):
         task.t_name = request.POST['name']
         task.t_description = request.POST['description']
         task.t_due_date = request.POST['due_date']
-        # Check if these 2 lines need to be left in.
         task.t_modified_date = timezone.now()
+
+        # Handle assignees.
+        assignees = request.POST.getlist('assignees')
+        if assignees:
+            # If there are assignees are selected, update them.
+            task.t_assignees.set(assignees)
+        else:
+            # If no assignees are selected, clear the current assignees.
+            task.t_assignees.clear()
+    
         task.save()
-        task.t_assignees.set(request.POST.getlist('assignees'))
-        
         return redirect('project_detail', id=project.id)
     
     context = {
@@ -281,7 +316,7 @@ def delete_project_view(request, id):
         project.delete()
         messages.success(request, f'Project "{project_name}" has been deleted.')
         # Once deleted, return to the user's dashboard/project list page since current project has been deleted.
-        return redirect('project_list')
+        return redirect('managerDash')
     
     # Show deletion confirmation page.
     return render(request, 'deleteProject.html', {'project': project})
@@ -307,9 +342,6 @@ def delete_task_view(request, id, t_id):
     return render(request, 'deleteTask.html', {'project': project, 'task': task})
 
 # Unique to teammates (a.k.a project members, task assignees): can update the status of their assigned task(s).
-# what needs to be done here: update_task_status_view (for project members/assignees)
-# add url for it, too
-
 @login_required
 def update_task_status_view(request, id, t_id):
     # Ensure the user is a teammate.

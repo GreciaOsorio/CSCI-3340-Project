@@ -1,6 +1,11 @@
 {%extends 'base.html'%}
 {%block content%}
 
+{% comment %} Used for team member selection. {% endcomment %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />  
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <html>
     <body>
         <div id="create-project-page" class="container h-100">
@@ -32,7 +37,7 @@
                             </p>
                             <p>
                                 <label for="team_members">Team Members:</label>
-                                <select name="members" class="project-control members" multiple required>
+                                <select name="members" class="project-control members select2-multiple" multiple required style="width: 100%;">
                                     {% for teammate in available_teammates %}
                                         <option value="{{ teammate.id }}">{{ teammate.username }}</option>
                                     {% endfor %}
@@ -48,6 +53,16 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            $(document).ready(function() {
+                $('.select2-multiple').select2({
+                    placeholder: "Select team members",
+                    allowClear: true // Allow clearing of selected members.
+                });
+            });
+        </script>
+
     </body>
 </html>
 

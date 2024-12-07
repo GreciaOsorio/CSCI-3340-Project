@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-{%block content%}
-{%load static%}
+{% block content %}
+{% load static %}
 <head>
     <title>{{ project.p_name }}</title>
 </head>
@@ -19,14 +19,29 @@
     <ul>
     {% for task in tasks %}
         <li>
-            {{ task.t_name }} - {{ task.t_status }}
+            {{ task.t_name }} - {{ task.t_status }} 
             (Due: {{ task.t_due_date }})
+            
+            {% if task.is_unassigned %}
+                <p>Assigned to: Unassigned</p>
+            {% else %}
+                <p>Assigned to: 
+                    {% for assignee in task.t_assignees.all %}
+                        {% if assignee == current_user %}
+                            You{% if not forloop.last %}, {% endif %}
+                        {% else %}
+                            {{ assignee.username }}{% if not forloop.last %}, {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </p>
+            {% endif %}
+            
             {% if user_type == 'manager' %}
             <a href="{% url 'update_task' project.id task.id %}">Edit</a>
             <a href="{% url 'delete_task' project.id task.id %}" class="delete-btn">Delete Task</a>
             {% endif %}
             
-            {% if user_type == 'teammate' %}
+            {% if user_type == 'teammate' and current_user in task.t_assignees.all %}
             <form method="POST" action="{% url 'update_task_status' id=project.id t_id=task.id %}">
                 {% csrf_token %}
                 <select name="status">
@@ -39,9 +54,8 @@
                 <button type="submit">Update</button>
             </form>
             {% endif %}
-            
         </li>
     {% endfor %}
     </ul>
 </body>
-{% endblock %}
+{% endblock %}pr

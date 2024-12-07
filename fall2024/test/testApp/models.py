@@ -88,11 +88,16 @@ class Task(models.Model):
     # Many users can be assigned to many tasks.
     t_assignees = models.ManyToManyField(
         User,
-        related_name='assigned_tasks'
+        related_name='assigned_tasks',
+        blank=True  # This allows the field to be empty.
     )
 
+    def is_unassigned(self):
+        return self.t_assignees.count() == 0
+
     def __str__(self):
-        return f"{self.project.p_name} - {self.t_name}"
+        status = " (Unassigned)" if self.is_unassigned() else ""
+        return f"{self.project.p_name} - {self.t_name}{status}"
     
     # Used to properly update the date + time a task is updated.
     def save(self, *args, **kwargs):

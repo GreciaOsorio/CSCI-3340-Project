@@ -3,6 +3,11 @@
 <html>
 <head>
     <title>Update Project</title>
+
+    {% comment %} Used for team member selection. {% endcomment %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body>
     <h1>Update Project: {{ project.p_name }}</h1>
@@ -22,7 +27,7 @@
         </p>
         <p>
             <label>Members:</label>
-            <select name="members" multiple required>
+            <select name="members" multiple="multiple" class="js-example-basic-multiple" style="width: 100%;">
                 {% for teammate in available_teammates %}
                     <option value="{{ teammate.id }}" {% if teammate in project.p_members.all %}selected{% endif %}>
                         {{ teammate.username }}
@@ -32,5 +37,15 @@
         </p>
         <button type="submit">Update Project</button>
     </form>
+
+    <script>
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2({
+                placeholder: "Select assignees",
+                allowClear: true // Allows clearing of selected members.
+            });
+        });
+    </script>
+
 </body>
 </html>
