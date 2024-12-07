@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.messages import get_messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
@@ -56,7 +57,7 @@ def prepare_dashboard_context(user, is_manager):
         template_name = 'managerDash.html'
     else:
         projects = Project.objects.filter(p_members=user)
-        project_heading = "(Teammate) Your projects:"
+        project_heading = "Your projects:"
         template_name = 'teammateDash.html'
     
     context = {
@@ -111,6 +112,10 @@ def teammate_dashboard(request):
 
 @login_required
 def logout_view(request):
+    # Clear all messages
+    storage = get_messages(request)
+    for _ in storage:  # Iterate through to clear
+        pass
     logout(request)
     return redirect('home') 
 
@@ -303,3 +308,25 @@ def delete_task_view(request, id, t_id):
 # Unique to teammates (a.k.a project members, task assignees): can update the status of their assigned task(s).
 # what needs to be done here: update_task_status_view (for project members/assignees)
 # add url for it, too
+
+@login_required
+def update_task_status_view(request, id, t_id):
+    # Ensure the user is a teammate.
+    if request.user.userprofile.user_type != 'teammate':
+        raise PermissionDenied
+
+    # Get the project and task, ensuring the user has access.
+    project = get_object_or_404(Project, id=id, p_members=request.user)
+    task = get_object_or_404(Task, id=t_id, project=project)
+
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        if new_status in dict(Task.STATUS_CHOICES).keys():
+            task.t_status = new_status
+            task.save()
+            messages.success(request, f'Status for task "{task.t_name}" updated to "{new_status}".')
+        else:
+            messages.error(request, "Invalid status choice.")
+        return redirect('project_detail', id=project.id)
+    
+    raise PermissionDenied
