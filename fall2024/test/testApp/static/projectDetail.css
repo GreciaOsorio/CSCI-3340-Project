@@ -3,6 +3,129 @@
 
 body {
     font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 3em;
+    font-weight: 600;
+    color: #333;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column; /* Stack title and details vertically */
+}
+
+.details {
+    margin-top: 10px; /* Add some spacing under the title */
+    font-size: 1em; /* Adjust font size for better readability */
+    color: #666; /* Subtle color for secondary information */
+}
+
+.description, .due-date {
+    margin: 5px 0; /* Add space between description and due date */
+}
+
+.edit-section{
+    margin-left: 2%;
+    margin-bottom: 0.5%;
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    width: 40px; 
+    height: 40px;
+    border-radius: 8px; 
+    background-color: rgba(247,187,91,0.4);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.top-section{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 20px;
+    margin-left: 20%;
+ 
+}
+.edit-btn i{
+    margin-bottom: 20%;
+    color: #f7ba5b;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.edit-btn i:hover{
+    color: black;
+}
+
+.columns-container {
+    gap: 50px;
+    display: flex;
+    justify-content: center; 
+    align-items: center;      
+    margin-top: 20px;     
+}
+
+.column{
+    border-radius: 20px;
+    width: 300px;
+    padding: 15px;
+    min-height: 650px;
+
+}
+.column[data-column="todo"]{
+    background-color: #ffebeb;
+    }
+.column[data-column="in-progress"]{
+background-color: #fff6e3;
+}
+.column[data-column="done"]{
+    background-color: #e9ffe7;
+}
+
+.column-title {
+    font-size: 1.5em;
+    margin-bottom: 20px;    
+    padding-bottom: 5px;   
+}
+
+.todo-title {
+    border-bottom: 3px solid #F7825B;
+}
+
+.in-progress-title{
+    border-bottom: 3px solid #F7BB5B;
+}
+
+.done-title{
+    border-bottom: 3px solid #8BC48A;
+}
+
+.task-container {
+    background-color: white;  
+    padding: 10px;              
+    margin-bottom: 20px;        
+    border-radius: 10px;         
+}
+
+.column-title-container {
+    justify-content: space-between; 
+}
+
+
+.add-task-section .add-btn {
+    font-size: 1.5em; 
+    color: #f7ba5b; 
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+}
+
+.add-task-section .add-btn:hover {
+    color: black; 
+
 }
