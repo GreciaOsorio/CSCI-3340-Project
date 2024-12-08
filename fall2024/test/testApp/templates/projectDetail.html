@@ -5,43 +5,68 @@
     <title>{{ project.p_name }}</title>
 </head>
 <body>
-    <h1>{{ project.p_name }}</h1>
+    <section class= "top-section" >
+        <h1>{{ project.p_name }}</h1>
+        {% if user_type == 'manager' %}
+        <div class = "edit-section">
+            <a href="{% url 'update_project' project.id %}" class="edit-btn">
+                <i class="fa-solid fa-pen"></i>
+        </a>
+        </div> 
+        {% endif %}     
+    </section>
     <p>Description: {{ project.p_description }}</p>
     <p>Due Date: {{ project.p_due_date }}</p>
+
+
     
-    {% if user_type == 'manager' %}
-    <a href="{% url 'create_task' project.id %}">Create New Task</a>
-    <a href="{% url 'update_project' project.id %}">Edit Project</a>
-    <a href="{% url 'delete_project' project.id %}" class="delete-btn">Delete Project</a>
-    {% endif %}
-    
-    <h2>Tasks</h2>
-    <ul>
-    {% for task in tasks %}
-        <li>
-            {{ task.t_name }} - {{ task.t_status }}
-            (Due: {{ task.t_due_date }})
-            {% if user_type == 'manager' %}
-            <a href="{% url 'update_task' project.id task.id %}">Edit</a>
-            <a href="{% url 'delete_task' project.id task.id %}" class="delete-btn">Delete Task</a>
-            {% endif %}
-            
-            {% if user_type == 'teammate' %}
-            <form method="POST" action="{% url 'update_task_status' id=project.id t_id=task.id %}">
-                {% csrf_token %}
-                <select name="status">
-                    {% for value, display in task.STATUS_CHOICES %}
-                    <option value="{{ value }}" {% if task.t_status == value %}selected{% endif %}>
-                        {{ display }}
-                    </option>
-                    {% endfor %}
-                </select>
-                <button type="submit">Update</button>
-            </form>
-            {% endif %}
-            
-        </li>
-    {% endfor %}
-    </ul>
+    <div class="columns-container">
+        <div class="column" data-column="todo">
+            <div class="column-title-container">
+                <div class="column-title todo-title">To Do</div>
+                {% if user_type == 'manager' %}
+                <div class = "add-task-section">
+                    <a href="{% url 'create_task' project.id %}" class="add-btn">
+                        <i class="fa-solid fa-plus"></i>
+                    </a>
+                </div> 
+                {% endif %}
+            </div> 
+            <div class="task" draggable="true">
+                {% for task in tasks %}
+                    <div class="task-container">
+                        {{ task.t_name }} - {{ task.t_status }}
+                        (Due: {{ task.t_due_date }})
+                        {% if user_type == 'manager' %}
+                        <a href="{% url 'update_task' project.id task.id %}">Edit</a>
+                        <a href="{% url 'delete_task' project.id task.id %}" class="delete-btn">Delete Task</a>
+                        {% endif %}
+                        
+                        {% if user_type == 'teammate' %}
+                        <form method="POST" action="{% url 'update_task_status' id=project.id t_id=task.id %}">
+                            {% csrf_token %}
+                            <select name="status">
+                                {% for value, display in task.STATUS_CHOICES %}
+                                <option value="{{ value }}" {% if task.t_status == value %}selected{% endif %}>
+                                    {{ display }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Update</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="column" data-column="in-progress">
+            <div class="column-title in-progress-title">In Progress</div>
+        </div>
+        <div class="column" data-column="done">
+            <div class="column-title done-title">Done</div>
+        </div>
+    </div>
+
+
 </body>
 {% endblock %}
