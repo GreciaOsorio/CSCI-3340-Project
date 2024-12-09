@@ -21,7 +21,9 @@
         </div>
         {% endif %}
     </section>
-      
+    {% if user_type == 'manager' %}
+    <a href="{% url 'delete_project' project.id %}" class="delete-btn">Delete Project</a>
+    {% endif %}
     <div class="columns-container">
         <div class="column" data-column="todo">
             <div class="column-title-container">
