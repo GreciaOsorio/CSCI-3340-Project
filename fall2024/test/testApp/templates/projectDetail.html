@@ -44,11 +44,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control-description" id="description" name="description" required>{{ project.p_description }}</textarea>
+                                    <textarea class="edit-form-control-description" id="description" name="description" required>{{ project.p_description }}</textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="due_date" class="form-label">Due Date</label>
-                                    <input class="time-due" type="datetime-local"  id="due_date" name="due_date" value="{{ task.t_due_date|date:'Y-m-d\TH:i' }}" required>
+                                    <input type="datetime-local" class="edit-time-due" id="due_date" name="due_date" value="{{ project.p_due_date|date:'Y-m-d\TH:i' }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="members" class="form-label">Members</label>
