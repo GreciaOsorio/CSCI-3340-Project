@@ -37,7 +37,7 @@
                             </p>
                             <p>
                                 <label for="team_members">Team Members:</label>
-                                <select name="members" class="project-control members select2-multiple" multiple required style="width: 100%;">
+                                <select name="members" class="project-control teammates select2-multiple" multiple required style="width: 100%;">
                                     {% for teammate in available_teammates %}
                                         <option value="{{ teammate.id }}">{{ teammate.username }}</option>
                                     {% endfor %}
