@@ -92,7 +92,8 @@ h1 {
     justify-content: center; 
     align-items: center;      
     margin-top: 20px;     
-}
+} 
+
 
 .column{
     border-radius: 20px;
@@ -101,6 +102,7 @@ h1 {
     min-height: 650px;
 
 }
+
 .column[data-column="todo"]{
     background-color: #ffebeb;
     }
