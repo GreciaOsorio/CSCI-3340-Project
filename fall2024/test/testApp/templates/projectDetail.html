@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
+
 <head>
     <title>{{ project.p_name }}</title>
 </head>
@@ -257,6 +258,7 @@
             // Reset the member selection area created using Select2.
             var select = $(this).find('.select2-update-project');
             select.val(null).trigger('change');
+            
             {% for teammate in available_teammates %}
             // If a teammate is a part of the project, make sure they remain selected, even if a user had "deleted" them.
                 {% if teammate in project.p_members.all %}
@@ -280,19 +282,25 @@
             });
         });
 
-        // Reset the updating task modal once the user closes/clicks off of it.
-        $('.modal').on('hidden.bs.modal', function() {
-            // Reset all form fields (name, description, etc.).
+        // Resetting this specific modal is super annoying because of Select2!
+        // So, some extra steps are needed to ensure the Select2 returns to its original state.
+
+        // When the modal first opens, store the selected assignees.
+        $('.modal').on('show.bs.modal', function () {
+            const select = $(this).find('.select2-update-task');
+            select.data('original-value', select.val());
+        });
+
+        // When the modal closes, restore the selected assignees.
+        $('.modal').on('hidden.bs.modal', function () {
+            // Reset form's original values.
             $(this).find('form')[0].reset();
-            // Reset the assignee selection area created using Select2.
-            var select = $(this).find('.select2-update-task');
-            select.val(null).trigger('change');
-            {% for member in project_members %}
-            // If a teammate is a part of a task, make sure they remain selected, even if a user had "deleted" them.
-                {% if member in task.t_assignees.all %}
-                    select.val([...select.val() || [], '{{ member.id }}']).trigger('change');
-                {% endif %}
-            {% endfor %}
+            const select = $(this).find('.select2-update-task');
+
+            // Reset the member selection area created using Select2.
+            // We take from the "original-value", which was found when first opening the modal.
+            const originalValue = select.data('original-value');
+            select.val(originalValue).trigger('change');
         });
     </script>
     
