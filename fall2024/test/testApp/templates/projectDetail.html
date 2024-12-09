@@ -207,34 +207,42 @@
 
     <script>
         // Script for teammate filtering amongst project tasks.
-        // I changed this- Kayla
+        // Updated for dropdown styling.
         $(document).ready(function () {
             $('.dropdown-item').on('click', function (e) {
-                e.preventDefault(); // Prevent default anchor behavior
+                e.preventDefault(); // Prevent default behavior.
                 
                 const selectedTeammate = $(this).data('value');
                 
-                // Update button text to reflect the selected filter
+                // Update button text to reflect the selected filter.
                 $('#teammateFilterButton').html(`<i class="fas fa-filter"></i> ${$(this).text()}`);
                 
-                // If "All Teammates" is selected, show all task cards
+                // If "All Teammates" is selected, show all task cards.
                 if (selectedTeammate === 'all') {
                     $('.task-container').show();
                     return;
                 }
         
-                // Hide all tasks, then selectively show relevant ones
+                // "All Teammates" was not selected, so what about the other options?
+                // First, we have to hide all cards, and THEN, we can choose which ones to display.
                 $('.task-container').hide();
                 
+                // Show tasks for selected teammate.
                 $('.task-container').each(function () {
                     const taskDiv = $(this).find('.card-task-assign');
                     const taskText = taskDiv.text();
                     const assigneeIds = taskDiv.data('assignee-ids');
                     
+                    // Check if the task has any assignees.
+                    // If not, then display tasks that are unassigned.
                     if (taskText.includes('Unassigned') && selectedTeammate === 'unassigned') {
                         $(this).show();
-                    } else if (assigneeIds) {
+                    } 
+                    // Otherwise, a teammate was selected for filtering.
+                    else if (assigneeIds) {
+                        // Split at the comma to identify each assignee in the list.
                         const taskAssignees = assigneeIds.toString().split(',');
+                         // If the selected teammate is included in the list of assignees, then display their card(s).
                         if (taskAssignees.includes(selectedTeammate.toString())) {
                             $(this).show();
                         }
