@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
+
 <head>
     <title>{{ project.p_name }}</title>
 </head>
@@ -13,21 +14,65 @@
                 <p class="due-date">Due Date: {{ project.p_due_date }}</p>
             </div>
         </div>
-        {% if user_type == 'manager' %}
-        <div class="edit-section">
-            <a href="{% url 'update_project' project.id %}" class="edit-btn">
-                <i class="fa-solid fa-pen"></i>
-            </a>
-        </div>
-        {% endif %}
 
+        {% comment %}  {% endcomment %}
         {% if user_type == 'manager' %}
+        {% comment %} EDIT PROJECT MODAL {% endcomment %}
+            <div class="edit-section">
+                <a href="#" class="edit-btn" data-bs-toggle="modal" data-bs-target="#updateProjectModal">
+                    <i class="fa-solid fa-pen"></i>
+                </a>
+            </div>
+
+            <div class="modal fade" id="updateProjectModal" tabindex="-1" aria-labelledby="updateProjectModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateProjectModalLabel">Update Project: {{ project.p_name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="POST" action="{% url 'update_project' project.id %}">
+                            <div class="modal-body">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ project.p_name }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" required>{{ project.p_description }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="due_date" class="form-label">Due Date</label>
+                                    <input type="datetime-local" class="form-control" id="due_date" name="due_date" value="{{ project.p_due_date|date:'Y-m-d\TH:i' }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="members" class="form-label">Members</label>
+                                    <select name="members[]" multiple="multiple" class="select2-update-project" style="width: 100%;">
+                                        {% for teammate in available_teammates %}
+                                            <option value="{{ teammate.id }}" {% if teammate in project.p_members.all %}selected{% endif %}>
+                                                {{ teammate.username }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Update Project</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% comment %} DELETE PROJECT MODAL {% endcomment %}
             <div class="delete-section">
                 <a href="#" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteProjectModal">
                     <i class="fa-solid fa-trash"></i>
                 </a>
             </div>
-            
+                
             <div class="modal fade" id="deleteProjectModal" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -93,7 +138,52 @@
                     
                     
                     {% if user_type == 'manager' %}
-                        <a href="{% url 'update_task' project.id task.id %}" class="edit-task-btn">Edit</a>
+                    {% comment %} EDIT TASK MODAL {% endcomment %}
+                        <a href="#" class="edit-task-btn" data-bs-toggle="modal" data-bs-target="#updateTaskModal-{{task.id}}">Edit</a>
+
+                        <div class="modal fade" id="updateTaskModal-{{task.id}}" aria-labelledby="updateTaskModalLabel-{{task.id}}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="updateTaskModalLabel-{{ task.id }}">Update Task: {{ task.t_name }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="POST" action="{% url 'update_task' project.id task.id %}">
+                                        <div class="modal-body">
+                                            {% csrf_token %}
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label">Name</label>
+                                                <input type="text" class="form-control" id="name" name="name" value="{{ task.t_name }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="description" class="form-label">Description</label>
+                                                <textarea class="form-control" id="description" name="description" required>{{ task.t_description }}</textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="due_date" class="form-label">Due Date</label>
+                                                <input type="datetime-local" class="form-control" id="due_date" name="due_date" value="{{ task.t_due_date|date:'Y-m-d\TH:i' }}" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="assignees" class="form-label">Assignees</label>
+                                                <select name="assignees[]" multiple="multiple" class="select2-update-task" style="width: 100%;">
+                                                    {% for member in project_members %}
+                                                        <option value="{{ member.id }}" {% if member in task.t_assignees.all %}selected{% endif %}>
+                                                            {{ member.username }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Update Task</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% comment %} DELETE TASK MODAL {% endcomment %}
                         <a href="#" class="delete-task-btn" data-bs-toggle="modal" data-bs-target="#deleteTaskModal-{{ task.id }}">Delete</a>
 
                         <div class="modal fade" id="deleteTaskModal-{{ task.id }}" tabindex="-1">
@@ -149,5 +239,70 @@
             <div class="column-title done-title">Completed</div>
         </div>
     </div>
+    
+
+    <script>
+        // Script for updating project modal.
+        $(document).ready(function() {
+            $('.select2-update-project').select2({
+                placeholder: "Select members",
+                allowClear: true,
+                dropdownParent: $('#updateProjectModal')
+            });
+        });
+
+        // Reset the updating project modal once the user closes/clicks off of it.
+        $('#updateProjectModal').on('hidden.bs.modal', function() {
+            // Reset all form fields (name, description, etc.).
+            $(this).find('form')[0].reset();
+            // Reset the member selection area created using Select2.
+            var select = $(this).find('.select2-update-project');
+            select.val(null).trigger('change');
+            
+            {% for teammate in available_teammates %}
+            // If a teammate is a part of the project, make sure they remain selected, even if a user had "deleted" them.
+                {% if teammate in project.p_members.all %}
+                    select.val([...select.val() || [], '{{ teammate.id }}']).trigger('change');
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+
+    <script>
+        // Script for updating task modal (this was difficult because of dropdownParent!).
+        $(document).ready(function() {
+            $('.select2-update-task').each(function() {
+                $(this).select2({
+                    placeholder: "Select members",
+                    allowClear: true,
+                    // Make sure dropdown is visible inside of modal, which was causing issues.
+                    dropdownParent: $(this).closest('.modal'),
+                    width: '100%'
+                });
+            });
+        });
+
+        // Resetting this specific modal is super annoying because of Select2!
+        // So, some extra steps are needed to ensure the Select2 returns to its original state.
+
+        // When the modal first opens, store the selected assignees.
+        $('.modal').on('show.bs.modal', function () {
+            const select = $(this).find('.select2-update-task');
+            select.data('original-value', select.val());
+        });
+
+        // When the modal closes, restore the selected assignees.
+        $('.modal').on('hidden.bs.modal', function () {
+            // Reset form's original values.
+            $(this).find('form')[0].reset();
+            const select = $(this).find('.select2-update-task');
+
+            // Reset the member selection area created using Select2.
+            // We take from the "original-value", which was found when first opening the modal.
+            const originalValue = select.data('original-value');
+            select.val(originalValue).trigger('change');
+        });
+    </script>
+    
 </body>
 {% endblock %}
