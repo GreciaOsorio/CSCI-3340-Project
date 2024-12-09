@@ -255,3 +255,26 @@ h1 {
     margin-left: 0% !important;
     padding-right: 2px !important;
 }
+.teammate-filter .btn {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    background-color: #f7ba5b;
+    border: none;
+    color: white;
+    margin-left: 17%;
+}
+
+.teammate-filter .btn:hover {
+    background-color: #d89f4e;
+}
+
+.teammate-filter .dropdown-menu {
+    min-width: 200px;
+}
+
+.teammate-filter .dropdown-item {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+    cursor: pointer;
+}
