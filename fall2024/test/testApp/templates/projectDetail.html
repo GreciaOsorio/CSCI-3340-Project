@@ -20,14 +20,44 @@
             </a>
         </div>
         {% endif %}
+
         {% if user_type == 'manager' %}
-        <div class="delete-section">
-            <a href="{% url 'delete_project' project.id %}" class="delete-btn">
-                <i class="fa-solid fa-trash"></i>
-            </a>
-        </div>
+            <div class="delete-section">
+                <a href="#" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteProjectModal">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+            </div>
+            
+            <div class="modal fade" id="deleteProjectModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete Project: {{ project.p_name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+                            
+                            <div class="project-info">
+                                <p><strong>Project Name:</strong> {{ project.p_name }}</p>
+                                <p><strong>Description:</strong> {{ project.p_description }}</p>
+                                <p><strong>Due Date:</strong> {{ project.p_due_date }}</p>
+                                <p><strong>Number of Tasks:</strong> {{ project.get_task_count }}</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="POST" action="{% url 'delete_project' project.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Yes, Delete Project</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endif %}
     </section>
+    
     <div class="columns-container">
         <div class="column" data-column="todo">
             <div class="column-title-container">
@@ -59,8 +89,37 @@
                     {% endif %}
                     
                     {% if user_type == 'manager' %}
-                    <a href="{% url 'update_task' project.id task.id %}">Edit</a>
-                    <a href="{% url 'delete_task' project.id task.id %}" class="delete-task-btn">Delete Task</a>
+                        <a href="{% url 'update_task' project.id task.id %}">Edit</a>
+                        <a href="#" class="delete-task-btn" data-bs-toggle="modal" data-bs-target="#deleteTaskModal-{{ task.id }}">Delete Task</a>
+
+                        <div class="modal fade" id="deleteTaskModal-{{ task.id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Delete Task: {{ task.t_name }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete this task? This action cannot be undone.</p>
+                                        
+                                        <div class="task-info">
+                                            <p><strong>Task Name:</strong> {{ task.t_name }}</p>
+                                            <p><strong>Project:</strong> {{ project.p_name }}</p>
+                                            <p><strong>Description:</strong> {{ task.t_description }}</p>
+                                            <p><strong>Due Date:</strong> {{ task.t_due_date }}</p>
+                                            <p><strong>Status:</strong> {{ task.get_t_status_display }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form method="POST" action="{% url 'delete_task' project.id task.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Yes, Delete Task</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     {% endif %}
                     
                     {% if user_type == 'teammate' and current_user in task.t_assignees.all %}
