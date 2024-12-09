@@ -44,11 +44,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" name="description" required>{{ project.p_description }}</textarea>
+                                    <textarea class="form-control-description" id="description" name="description" required>{{ project.p_description }}</textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="due_date" class="form-label">Due Date</label>
-                                    <input type="datetime-local" class="form-control" id="due_date" name="due_date" value="{{ project.p_due_date|date:'Y-m-d\TH:i' }}" required>
+                                    <input class="time-due" type="datetime-local"  id="due_date" name="due_date" value="{{ task.t_due_date|date:'Y-m-d\TH:i' }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="members" class="form-label">Members</label>
@@ -99,7 +99,7 @@
                         <div class="modal-footer">
                             <form method="POST" action="{% url 'delete_project' project.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Yes, Delete Project</button>
+                                <button type="submit" class="btn btn-danger">Delete Project</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             </form>
                         </div>
