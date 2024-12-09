@@ -1,0 +1,104 @@
+projectDetail.html:
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<head>
+    <title>{{ project.p_name }}</title>
+</head>
+
+<body>
+
+    <section class="top-section">
+        <div class="title-container">
+            <h1 class="task-title">{{ project.p_name }}</h1>
+            <div class="details">
+                <p class="description">Description: {{ project.p_description }}</p>
+                <p class="due-date">Due Date: {{ project.p_due_date }}</p>
+            </div>
+        </div>
+ 
+        {% if user_type == 'manager' %}
+        <div class="edit-section">
+            <a href="{% url 'update_project' project.id %}" class="edit-btn">
+                <i class="fa-solid fa-pen"></i>
+            </a>
+        </div>
+        <div class="delete-section">
+            <a href="{% url 'delete_project' project.id %}" class="delete-btn">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+        </div>
+        {% endif %}
+    </section>
+
+    <div class="columns-container">
+        <!-- To Do Column -->
+        {% include 'partials/projectDetailPartial.html' with column_name="todo" column_title="To Do" tasks=tasks_by_status.pending %}
+        
+        <!-- In Progress Column -->
+        {% include 'partials/projectDetailPartial.html' with column_name="in-progress" column_title="In Progress" tasks=tasks_by_status.in_progress %}
+        
+        <!-- Completed Column -->
+        {% include 'partials/projectDetailPartial.html' with column_name="done" column_title="Completed" tasks=tasks_by_status.completed %}
+    </div>
+    
+</body>
+{% endblock %}
+
+
+
+
+partial 
+
+<div class="column" data-column="{{ column_name }}">
+    <div class="column-title {{ column_name }}-title">{{ column_title }}</div>
+
+    {% if user_type == 'manager' and column_name == "todo" %}
+    <div class="add-task-section">
+        <a href="{% url 'create_task' project.id %}" class="add-btn">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+    {% endif %}
+
+    {% for task in tasks %}
+    <div class="task-container">
+        {{ task.t_name }} - {{ task.t_status }} 
+        (Due: {{ task.t_due_date }})
+
+        {% if task.is_unassigned %}
+        <p>Assigned to: Unassigned</p>
+        {% else %}
+        <p>Assigned to: 
+            {% for assignee in task.t_assignees.all %}
+                {% if assignee == current_user %}
+                    You{% if not forloop.last %}, {% endif %}
+                {% else %}
+                    {{ assignee.username }}{% if not forloop.last %}, {% endif %}
+                {% endif %}
+            {% endfor %}
+        </p>
+        {% endif %}
+
+        {% if user_type == 'manager' %}
+        <a href="{% url 'update_task' project.id task.id %}">Edit</a>
+        <a href="{% url 'delete_task' project.id task.id %}" class="delete-task-btn">Delete Task</a>
+        {% endif %}
+
+        {% if user_type == 'teammate' and current_user in task.t_assignees.all %}
+        <form method="POST" action="{% url 'update_task_status' id=project.id t_id=task.id %}">
+            {% csrf_token %}
+            <select name="status">
+                {% for value, display in task.STATUS_CHOICES %}
+                <option value="{{ value }}" {% if task.t_status == value %}selected{% endif %}>
+                    {{ display }}
+                </option>
+                {% endfor %}
+            </select>
+            <button type="submit">Update</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>

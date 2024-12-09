@@ -151,9 +151,17 @@ def project_detail_view(request, id):
     # Retrieve all members of the particular project.
     project_members = project.p_members.all()
 
+    # categorizing tasks by status 
+    tasks_by_status = {
+        'pending': project.tasks.filter(t_status='pending'),
+        'in_progress': project.tasks.filter(t_status='in_progress'),
+        'completed': project.tasks.filter(t_status='completed'),
+    }
+
     context = {
         'project': project,
         'tasks': tasks,
+        'tasks_by_status': tasks_by_status,
         'user_type': user_type,
         'current_user': request.user,
         'available_teammates': available_teammates,
