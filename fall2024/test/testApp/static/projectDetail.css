@@ -52,15 +52,38 @@ h1 {
     margin-left: 20%;
  
 }
-.edit-btn i{
-    margin-bottom: 20%;
+.edit-btn{
     color: #f7ba5b;
     font-size: 20px;
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
-.edit-btn i:hover{
+.edit-btn:hover{
+    color: black;
+}
+
+.delete-section{
+    margin-left: 1%;
+    margin-bottom: 2%;
+    display: inline-flex; 
+    align-items: center;
+    justify-content: center;
+    width: 40px; 
+    height: 40px;
+    border-radius: 10px; 
+    background-color: rgba(91, 104, 247, 0.4);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.delete-btn{
+    color: rgba(91, 104, 247, 1);
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.delete-btn:hover{
     color: black;
 }
 

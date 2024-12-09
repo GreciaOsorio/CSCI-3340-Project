@@ -20,10 +20,14 @@
             </a>
         </div>
         {% endif %}
+        {% if user_type == 'manager' %}
+        <div class="delete-section">
+            <a href="{% url 'delete_project' project.id %}" class="delete-btn">
+                <i class="fa-solid fa-trash"></i>
+            </a>
+        </div>
+        {% endif %}
     </section>
-    {% if user_type == 'manager' %}
-    <a href="{% url 'delete_project' project.id %}" class="delete-btn">Delete Project</a>
-    {% endif %}
     <div class="columns-container">
         <div class="column" data-column="todo">
             <div class="column-title-container">
@@ -57,7 +61,7 @@
                     
                     {% if user_type == 'manager' %}
                     <a href="{% url 'update_task' project.id task.id %}">Edit</a>
-                    <a href="{% url 'delete_task' project.id task.id %}" class="delete-btn">Delete Task</a>
+                    <a href="{% url 'delete_task' project.id task.id %}" class="delete-task-btn">Delete Task</a>
                     {% endif %}
                     
                     {% if user_type == 'teammate' and current_user in task.t_assignees.all %}
