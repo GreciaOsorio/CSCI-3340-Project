@@ -42,9 +42,8 @@
             </div> 
             {% for task in tasks %}
                 <div class="task-container">
-                    {{ task.t_name }} - {{ task.t_status }} 
-                    (Due: {{ task.t_due_date }})
-                    
+                    <div class="card-task-name">{{ task.t_name }} - {{ task.t_status }} </div>
+                    Due: {{ task.t_due_date }}
                     {% if task.is_unassigned %}
                         <p>Assigned to: Unassigned</p>
                     {% else %}

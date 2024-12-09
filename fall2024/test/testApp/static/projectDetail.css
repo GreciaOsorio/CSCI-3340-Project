@@ -135,7 +135,7 @@ background-color: #fff6e3;
 .task-container {
     background-color: white;  
     padding: 10px;              
-    margin-bottom: 20px;        
+    margin-bottom: 15px;        
     border-radius: 10px;   
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     gap: 5px;      
@@ -178,4 +178,9 @@ background-color: #fff6e3;
 .add-task-section .add-btn:hover {
     color: black; 
 
+}
+
+.card-task-name{
+    font-size: 16px;
+    font-weight: 600;
 }
