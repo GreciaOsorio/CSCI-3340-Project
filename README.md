@@ -39,6 +39,7 @@ We used several resources during the development of Cubby.
 - [**Django views and URLs video**](https://www.youtube.com/watch?v=HyN51x01Ve8)
 - [**Select2 documentation**](https://select2.org/getting-started/installation)
 - [**jQuery installation**](https://www.w3schools.com/jquery/jquery_get_started.asp)
+- [**jQuery change event documentation**](https://api.jquery.com/change/)
 
 ## 📸 Images Used
 Since this is a school project, and we will not be selling rights or usage of our project in any way, the images used are directly borrowed from the Internet. The links for all images used in this project will be listed below to give as much credit to the original creators as possible.
