@@ -103,7 +103,7 @@
     margin-top: 5rem;
 }
 
-#create-task-page input[type="text"], #create-task-page input[type="datetime-local"], #create-task-page textarea, select {
+#create-task-page input[type="text"], #create-task-page textarea, select {
     border: 1px solid #ccc;
     border-radius: 30px;
     padding: 0.75rem;
@@ -141,4 +141,18 @@ input.timeBox {
 /* Hide the inner text input field but keep the dropdown box visible */
 #create-task-page .select2-search__field {
     display: none; /* Hide the input field */
+}
+
+.project-control-descc{
+    margin-left: 0%;
+}
+
+#create-task-page input[type="datetime-local"]{
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    padding: 0.75rem;
+    width: 100%;
+    font-size: 1rem;
+    box-sizing: border-box;
+    margin-left: 0%;
 }

@@ -115,16 +115,18 @@
         {% endif %}
 
         {% if user_type == 'teammate' and current_user in task.t_assignees.all %}
-        <form method="POST" action="{% url 'update_task_status' id=project.id t_id=task.id %}">
+        <form class="change-status-fr" method="POST" action="{% url 'update_task_status' id=project.id t_id=task.id %}">
             {% csrf_token %}
-            <select name="status">
+            <select name="status" class="select-status-bar">
                 {% for value, display in task.STATUS_CHOICES %}
                 <option value="{{ value }}" {% if task.t_status == value %}selected{% endif %}>
                     {{ display }}
                 </option>
                 {% endfor %}
             </select>
-            <button type="submit">Update</button>
+            <button class="update-task-status-btn" type="submit">
+                <i class="fas fa-edit"></i>
+            </button>
         </form>
         {% endif %}
     </div>
