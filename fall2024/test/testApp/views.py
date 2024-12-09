@@ -137,18 +137,27 @@ def project_list_view(request):
 def project_detail_view(request, id):
     project = get_object_or_404(Project, id=id)
     
-    # Check if the user is a member of the project.
+    # Get all available users who are teammates.
+    available_teammates = User.objects.filter(
+        userprofile__user_type='teammate'
+    )
+    # Check if the current user is a member of the project.
     if request.user not in project.p_members.all() and request.user != project.p_manager:
         raise PermissionDenied
-    # Is user a project manager or teammate/assignee?
+    # Is current user a project manager or teammate/assignee?
     user_type = request.user.userprofile.user_type
+    # Retrieve all project tasks.
     tasks = project.tasks.all()
-    
+    # Retrieve all members of the particular project.
+    project_members = project.p_members.all()
+
     context = {
         'project': project,
         'tasks': tasks,
         'user_type': user_type,
-        'current_user': request.user
+        'current_user': request.user,
+        'available_teammates': available_teammates,
+        'project_members': project_members
     }
     return render(request, 'projectDetail.html', context)
 
@@ -160,7 +169,7 @@ def create_project_view(request):
     
     # Get all available users who are teammates.
     available_teammates = User.objects.filter(
-        userprofile__user_type='teammate'
+        userprofile__user_type='teammate',
     )
     
     if request.method == 'POST':
@@ -204,7 +213,7 @@ def update_project_view(request, id):
 
         # Get the current (before updating the project) and new members, which allows for us to determine members to be removed.
         current_members = set(project.p_members.all())
-        new_member_ids = request.POST.getlist('members')
+        new_member_ids = request.POST.getlist('members[]')
         new_members = set(User.objects.filter(id__in=new_member_ids))
         removed_members = current_members - new_members
         
@@ -229,7 +238,7 @@ def update_project_view(request, id):
         'project': project,
         'available_teammates': available_teammates
     }
-    return render(request, 'updateProject.html', context)
+    return render(request, 'projectDetail.html', context)
 
 @login_required
 def create_task_view(request, id):
@@ -278,7 +287,7 @@ def update_task_view(request, id, t_id):
         task.t_modified_date = timezone.now()
 
         # Handle assignees.
-        assignees = request.POST.getlist('assignees')
+        assignees = request.POST.getlist('assignees[]')
         if assignees:
             # If there are assignees are selected, update them.
             task.t_assignees.set(assignees)
@@ -287,14 +296,14 @@ def update_task_view(request, id, t_id):
             task.t_assignees.clear()
     
         task.save()
-        return redirect('project_detail', id=project.id)
+        return redirect('project_detail', id=id)
     
     context = {
         'project': project,
         'task': task,
         'project_members': project_members
     }
-    return render(request, 'updateTask.html', context)
+    return render(request, 'projectDetail.html', context)
 
 @login_required
 def delete_project_view(request, id):
@@ -313,11 +322,12 @@ def delete_project_view(request, id):
         # Once deleted, return to the user's dashboard/project list page since current project has been deleted.
         return redirect('managerDash')
     
+    context = {
+        'project': project
+    }
+    
     # Show deletion confirmation modal/popup.
-    return render(request, 'projectDetail.html', {
-        'project': project,
-        'show_delete_modal': True
-    })
+    return render(request, 'projectDetail.html', context)
 
 @login_required
 def delete_task_view(request, id, t_id):
@@ -337,12 +347,13 @@ def delete_task_view(request, id, t_id):
         # Once deleted, return to the deleted task's project page.
         return redirect('project_detail', id=project.id)
     
-    # Show deletion confirmation modal/popup.
-    return render(request, 'projectDetail.html', {
+    context = {
         'project': project,
         'task': task,
-        'show_delete_modal': True
-    })
+    }
+    
+    # Show deletion confirmation modal/popup.
+    return render(request, 'projectDetail.html', context)
 
 # Unique to teammates (a.k.a project members, task assignees): can update the status of their assigned task(s).
 @login_required
