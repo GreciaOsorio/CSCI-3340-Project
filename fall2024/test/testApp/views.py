@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect # check why we have to keep using these if they are supposed to be automatic 
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.utils import timezone
 from .forms import SignUpForm, LoginForm
 from .models import UserProfile, Project, Task
@@ -38,9 +38,9 @@ def signup_view(request):
             messages.success(request, 'Account created successfully!')
             login(request, user)
             if user_type == 'manager':
-                    return redirect('managerDash')  # Redirect to manager dashboard
+                    return redirect('managerDash')  # Redirect to manager dashboard.
             elif user_type == 'teammate':
-                    return redirect('teammateDash')  # Redirect to teammate dashboard
+                    return redirect('teammateDash')  # Redirect to teammate dashboard.
             else: 
                 return redirect('home') # Replace this with whatever screen we want to initially show our user after they signup.
     else:
@@ -49,7 +49,7 @@ def signup_view(request):
     context = {'form': form}
     return render(request, 'signup.html', context)
 
-# Helper for login_view
+# Helper for login_view.
 def prepare_dashboard_context(user, is_manager):
     if is_manager:
         projects = Project.objects.filter(p_manager=user)
@@ -84,9 +84,9 @@ def login_view(request):
                 # Determine user type and redirect to their dashboard.
                 user_type = user.userprofile.user_type
                 if user_type == 'manager':
-                    return redirect('managerDash')  # Redirect to manager dashboard
+                    return redirect('managerDash')  # Redirect to manager dashboard.
                 elif user_type == 'teammate':
-                    return redirect('teammateDash')  # Redirect to teammate dashboard
+                    return redirect('teammateDash')  # Redirect to teammate dashboard.
                 
             else: # Same here, our login success message shows in Django admin (make sure to refresh page).
                 messages.error(request, 'Invalid username or password.')
@@ -95,13 +95,13 @@ def login_view(request):
 
     return render(request, 'login.html', {'form': form})
 
+# Managers and teammates have slightly different dashboards because only managers can choose to create a new project.
 @login_required
 def manager_dashboard(request):
     if request.user.userprofile.user_type != 'manager':
         raise PermissionDenied
     context, template_name = prepare_dashboard_context(request.user, True)
     return render(request, template_name, context)
-
 
 @login_required
 def teammate_dashboard(request):
@@ -112,15 +112,14 @@ def teammate_dashboard(request):
 
 @login_required
 def logout_view(request):
-    # Clear all messages
+    # Clear all messages.
     storage = get_messages(request)
-    for _ in storage:  # Iterate through to clear
+    for _ in storage:  # Iterate through to clear.
         pass
     logout(request)
     return redirect('home') 
 
-
-# All Cubby users can view their project lists and specific project details.
+# All Cubby users can view their project lists (used during testing) and specific project details.
 @login_required
 def project_list_view(request):
     if request.user.userprofile.user_type == 'manager':
@@ -141,9 +140,8 @@ def project_detail_view(request, id):
     # Check if the user is a member of the project.
     if request.user not in project.p_members.all() and request.user != project.p_manager:
         raise PermissionDenied
-    # Get the user's profile type.
+    # Is user a project manager or teammate/assignee?
     user_type = request.user.userprofile.user_type
-    # Get all tasks for this project.
     tasks = project.tasks.all()
     
     context = {
@@ -160,7 +158,7 @@ def create_project_view(request):
     if request.user.userprofile.user_type != 'manager':
         raise PermissionDenied
     
-    # Get all users who are teammates.
+    # Get all available users who are teammates.
     available_teammates = User.objects.filter(
         userprofile__user_type='teammate'
     )
@@ -198,31 +196,28 @@ def update_project_view(request, id):
     )
     
     if request.method == 'POST':
-        # Get the current and new members.
-        current_members = set(project.p_members.all())
-        new_member_ids = request.POST.getlist('members')
-        new_members = set(User.objects.filter(id__in=new_member_ids))
-        
-        # Find members being removed.
-        removed_members = current_members - new_members
-        
         project.p_name = request.POST['name']
         project.p_description = request.POST['description']
         project.p_due_date = request.POST['due_date']
         project.p_modified_date = timezone.now()
         project.save()
+
+        # Get the current (before updating the project) and new members, which allows for us to determine members to be removed.
+        current_members = set(project.p_members.all())
+        new_member_ids = request.POST.getlist('members')
+        new_members = set(User.objects.filter(id__in=new_member_ids))
+        removed_members = current_members - new_members
         
-        # Update project members.
         project.p_members.set(new_members)
         
-        # Handle tasks for removed members.
+        # Handle any potential tasks that removed members may have been assigned to.
         if removed_members:
             for task in project.tasks.all():
                 # Get current task assignees.
                 current_assignees = set(task.t_assignees.all())
-                # Remove the members that were removed from the project.
+                # Remove the task assignees that were removed from the project.
                 removed_task_assignees = current_assignees.intersection(removed_members)
-                
+                # Update task assignee list.
                 if removed_task_assignees:
                     task.t_assignees.remove(*removed_task_assignees)
                     task.t_modified_date = timezone.now()
@@ -253,7 +248,7 @@ def create_task_view(request, id):
             t_due_date=request.POST['due_date'],
             t_manager=request.user
         )     
-        # Check if assignees were selected, since assigness are optional.
+        # Check if assignees were selected, since assignees are optional.
         assignees = request.POST.getlist('assignees')
         if assignees:
             task.t_assignees.set(assignees)
@@ -288,7 +283,7 @@ def update_task_view(request, id, t_id):
             # If there are assignees are selected, update them.
             task.t_assignees.set(assignees)
         else:
-            # If no assignees are selected, clear the current assignees.
+            # If no assignees are selected, clear the current assignees, which makes task unassigned.
             task.t_assignees.clear()
     
         task.save()
@@ -318,8 +313,11 @@ def delete_project_view(request, id):
         # Once deleted, return to the user's dashboard/project list page since current project has been deleted.
         return redirect('managerDash')
     
-    # Show deletion confirmation page.
-    return render(request, 'deleteProject.html', {'project': project})
+    # Show deletion confirmation modal/popup.
+    return render(request, 'projectDetail.html', {
+        'project': project,
+        'show_delete_modal': True
+    })
 
 @login_required
 def delete_task_view(request, id, t_id):
@@ -339,16 +337,21 @@ def delete_task_view(request, id, t_id):
         # Once deleted, return to the deleted task's project page.
         return redirect('project_detail', id=project.id)
     
-    return render(request, 'deleteTask.html', {'project': project, 'task': task})
+    # Show deletion confirmation modal/popup.
+    return render(request, 'projectDetail.html', {
+        'project': project,
+        'task': task,
+        'show_delete_modal': True
+    })
 
 # Unique to teammates (a.k.a project members, task assignees): can update the status of their assigned task(s).
 @login_required
 def update_task_status_view(request, id, t_id):
-    # Ensure the user is a teammate.
+    # Ensure the current user is a teammate.
     if request.user.userprofile.user_type != 'teammate':
         raise PermissionDenied
 
-    # Get the project and task, ensuring the user has access.
+    # Get the project and task, ensuring the current user has access.
     project = get_object_or_404(Project, id=id, p_members=request.user)
     task = get_object_or_404(Task, id=t_id, project=project)
 

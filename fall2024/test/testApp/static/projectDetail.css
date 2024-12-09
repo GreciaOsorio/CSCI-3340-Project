@@ -49,7 +49,7 @@ h1 {
     justify-content: start;
     align-items: center;
     padding: 20px;
-    margin-left: 20%;
+    margin-left: 16%;
  
 }
 .edit-btn{
@@ -134,9 +134,9 @@ background-color: #fff6e3;
 
 .task-container {
     background-color: white;  
-    padding: 10px;              
-    margin-bottom: 20px;        
-    border-radius: 10px;   
+    padding: 15px;              
+    margin-bottom: 15px;        
+    border-radius: 15px;   
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
     gap: 5px;      
 }
@@ -178,4 +178,62 @@ background-color: #fff6e3;
 .add-task-section .add-btn:hover {
     color: black; 
 
+}
+
+.card-task-name{
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.card-task-description{
+    font-size: 15px;
+    color: #666;
+}
+
+.card-task-duedate{
+    font-size: 13px;
+    font-style: italic;
+    color: #494949;
+}
+
+.card-task-assign{
+    font-size: 14px;
+    color: #494949;
+}
+
+.edit-task-btn{
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 25px;
+    border-radius: 5px;
+    border: 2px solid #ffe4b9;
+    color: #ffb53d;
+    background-color: #ffeed2;
+
+}
+.edit-task-btn:hover{
+    text-decoration: none;
+    color:black;
+}
+
+.delete-task-btn{
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 65px;
+    height: 25px;
+    border-radius: 5px;
+    border: 2px solid rgba(91, 104, 247, 0.1);
+    color: rgb(63, 79, 245);
+    background-color: rgba(91, 104, 247, 0.4);
+
+}
+
+.delete-task-btn:hover{
+    text-decoration: none;
+    color:black;
 }
