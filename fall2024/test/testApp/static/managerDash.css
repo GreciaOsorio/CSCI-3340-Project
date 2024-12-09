@@ -68,8 +68,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 50px;
-    max-width: 1200px;
-    margin: auto;
+    max-width: 100%;
     background-color: #ffffff;
     width: 100%;
 }
