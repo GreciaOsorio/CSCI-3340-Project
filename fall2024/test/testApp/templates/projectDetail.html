@@ -20,41 +20,43 @@
             </a>
         </div>
         {% endif %}
-    </section>
-    
-    {% if user_type == 'manager' %}
-        <a href="#" data-bs-toggle="modal" data-bs-target="#deleteProjectModal">
-            Delete Project
-        </a>
-        
-        <div class="modal fade" id="deleteProjectModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Delete Project: {{ project.p_name }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this project? This action cannot be undone.</p>
-                        
-                        <div class="project-info">
-                            <p><strong>Project Name:</strong> {{ project.p_name }}</p>
-                            <p><strong>Description:</strong> {{ project.p_description }}</p>
-                            <p><strong>Due Date:</strong> {{ project.p_due_date }}</p>
-                            <p><strong>Number of Tasks:</strong> {{ project.get_task_count }}</p>
+
+        {% if user_type == 'manager' %}
+            <div class="delete-section">
+                <a href="#" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteProjectModal">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+            </div>
+            
+            <div class="modal fade" id="deleteProjectModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Delete Project: {{ project.p_name }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <form method="POST" action="{% url 'delete_project' project.id %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Yes, Delete Project</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        </form>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this project? This action cannot be undone.</p>
+                            
+                            <div class="project-info">
+                                <p><strong>Project Name:</strong> {{ project.p_name }}</p>
+                                <p><strong>Description:</strong> {{ project.p_description }}</p>
+                                <p><strong>Due Date:</strong> {{ project.p_due_date }}</p>
+                                <p><strong>Number of Tasks:</strong> {{ project.get_task_count }}</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <form method="POST" action="{% url 'delete_project' project.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Yes, Delete Project</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
+    </section>
     
     <div class="columns-container">
         <div class="column" data-column="todo">
@@ -89,7 +91,7 @@
                     
                     {% if user_type == 'manager' %}
                         <a href="{% url 'update_task' project.id task.id %}">Edit</a>
-                        <a href="#" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteTaskModal-{{ task.id }}">Delete Task</a>
+                        <a href="#" class="delete-task-btn" data-bs-toggle="modal" data-bs-target="#deleteTaskModal-{{ task.id }}">Delete Task</a>
 
                         <div class="modal fade" id="deleteTaskModal-{{ task.id }}" tabindex="-1">
                             <div class="modal-dialog">
