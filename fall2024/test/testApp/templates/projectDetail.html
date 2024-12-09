@@ -72,26 +72,29 @@
             </div> 
             {% for task in tasks %}
                 <div class="task-container">
-                    {{ task.t_name }} - {{ task.t_status }} 
-                    (Due: {{ task.t_due_date }})
-                    
-                    {% if task.is_unassigned %}
+                    <div class="card-task-name">{{ task.t_name }} </div>
+                    <div class="card-task-description">{{ task.t_description }}</div>
+                    <div class="card-task-duedate">Due: {{ task.t_due_date }}</div>
+                    <div class="card-task-assign">
+                        {% if task.is_unassigned %}
                         <p>Assigned to: Unassigned</p>
-                    {% else %}
-                        <p>Assigned to: 
-                            {% for assignee in task.t_assignees.all %}
-                                {% if assignee == current_user %}
-                                    You{% if not forloop.last %}, {% endif %}
-                                {% else %}
-                                    {{ assignee.username }}{% if not forloop.last %}, {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        </p>
-                    {% endif %}
+                            {% else %}
+                                <p>Assigned to: 
+                                    {% for assignee in task.t_assignees.all %}
+                                        {% if assignee == current_user %}
+                                            You{% if not forloop.last %}, {% endif %}
+                                        {% else %}
+                                            {{ assignee.username }}{% if not forloop.last %}, {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </p>
+                        {% endif %}
+                    </div>
+                    
                     
                     {% if user_type == 'manager' %}
-                        <a href="{% url 'update_task' project.id task.id %}">Edit</a>
-                        <a href="#" class="delete-task-btn" data-bs-toggle="modal" data-bs-target="#deleteTaskModal-{{ task.id }}">Delete Task</a>
+                        <a href="{% url 'update_task' project.id task.id %}" class="edit-task-btn">Edit</a>
+                        <a href="#" class="delete-task-btn" data-bs-toggle="modal" data-bs-target="#deleteTaskModal-{{ task.id }}">Delete</a>
 
                         <div class="modal fade" id="deleteTaskModal-{{ task.id }}" tabindex="-1">
                             <div class="modal-dialog">
