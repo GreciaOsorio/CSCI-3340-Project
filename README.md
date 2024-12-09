@@ -39,5 +39,6 @@ We used several resources during the development of Cubby.
 
 ## 📸 Images Used
 Since this is a school project, and we will not be selling rights or usage of our project in any way, the images used are directly borrowed from the Internet. The links for all images used in this project will be listed below to give as much credit to the original creators as possible.
-- [**Logo Image**](https://www.instagram.com/joni_marriott/)
-- [**Hero Image**](https://www.istockphoto.com/illustrations/graphic-designer-at-work?page=2)
+- [**Logo image**](https://www.instagram.com/joni_marriott/)
+- [**Hero image**](https://www.istockphoto.com/illustrations/graphic-designer-at-work?page=2)
+- [**Tech stack image**](https://github.com/0l1v3rr/github-readme-tech-stack)
