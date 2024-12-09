@@ -19,7 +19,7 @@
                 <ul>
                     {% for project in projects %}
                     <li>
-                        <a href="{% url 'project_detail' project.id %}" class="project-link">
+                        <a class="project-link" href="{% url 'project_detail' project.id %}">
                             {{ project.p_name }} - {{ project.p_description }}
                         </a>
                     </li>
