@@ -34,7 +34,7 @@ We used several resources during the development of Cubby.
 - [**Django documentation**](https://docs.djangoproject.com/en/5.1/)
 - [**Django models video**](https://www.youtube.com/watch?v=RbJOmgTX63M)
 - [**Django views and URLs video**](https://www.youtube.com/watch?v=HyN51x01Ve8)
-- [**Select-2 documentation**](https://select2.org/getting-started/installation)
+- [**Select2 documentation**](https://select2.org/getting-started/installation)
 - [**jQuery installation**](https://www.w3schools.com/jquery/jquery_get_started.asp)
 
 ## 📸 Images Used
