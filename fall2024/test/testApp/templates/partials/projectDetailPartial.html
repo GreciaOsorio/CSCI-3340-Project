@@ -19,21 +19,21 @@
         <div class="card-task-name">{{ task.t_name }} </div>
         <div class="card-task-description">{{ task.t_description }}</div>
         <div class="card-task-duedate">Due: {{ task.t_due_date }}</div>
-        <div class="card-task-assign"> </div>
-
-        {% if task.is_unassigned %}
-        <p>Assigned to: Unassigned</p>
-        {% else %}
-        <p>Assigned to: 
-            {% for assignee in task.t_assignees.all %}
-                {% if assignee == current_user %}
-                    You{% if not forloop.last %}, {% endif %}
+        <div class="card-task-assign" data-assignee-ids="{% for assignee in task.t_assignees.all %}{{ assignee.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
+            {% if task.is_unassigned %}
+            <p>Assigned to: Unassigned</p>
                 {% else %}
-                    {{ assignee.username }}{% if not forloop.last %}, {% endif %}
-                {% endif %}
-            {% endfor %}
-        </p>
-        {% endif %}
+                    <p>Assigned to: 
+                        {% for assignee in task.t_assignees.all %}
+                            {% if assignee == current_user %}
+                                You{% if not forloop.last %}, {% endif %}
+                            {% else %}
+                                {{ assignee.username }}{% if not forloop.last %}, {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+            {% endif %}
+        </div>
 
         {% if user_type == 'manager' %}
         {% comment %} EDIT TASK MODAL {% endcomment %}
