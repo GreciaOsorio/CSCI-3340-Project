@@ -1,3 +1,4 @@
+projectDetail:
 {% extends 'base.html' %}
 {% block content %}
 {% load static %}
@@ -40,11 +41,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
-                                    <textarea class="form-control" id="description" name="description" required>{{ project.p_description }}</textarea>
+                                    <textarea class="edit-form-control-description" id="description" name="description" required>{{ project.p_description }}</textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="due_date" class="form-label">Due Date</label>
-                                    <input type="datetime-local" class="form-control" id="due_date" name="due_date" value="{{ project.p_due_date|date:'Y-m-d\TH:i' }}" required>
+                                    <input type="datetime-local" class="edit-time-due" id="due_date" name="due_date" value="{{ project.p_due_date|date:'Y-m-d\TH:i' }}" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="members" class="form-label">Members</label>
@@ -157,11 +158,11 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="description" class="form-label">Description</label>
-                                                <textarea class="form-control" id="description" name="description" required>{{ task.t_description }}</textarea>
+                                                <textarea class="edit-form-control-description" id="description" name="description" required>{{ task.t_description }}</textarea>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="due_date" class="form-label">Due Date</label>
-                                                <input type="datetime-local" class="form-control" id="due_date" name="due_date" value="{{ task.t_due_date|date:'Y-m-d\TH:i' }}" required>
+                                                <input class="edit-time-due" type="datetime-local"  id="due_date" name="due_date" value="{{ task.t_due_date|date:'Y-m-d\TH:i' }}" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="assignees" class="form-label">Assignees</label>
@@ -207,8 +208,8 @@
                                     <div class="modal-footer">
                                         <form method="POST" action="{% url 'delete_task' project.id task.id %}">
                                             {% csrf_token %}
-                                            <button type="submit" class="btn btn-danger">Yes, Delete Task</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Cancel</button>
+                                            <button type="submit" class="btn btn-danger">Delete Task</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                         </form>
                                     </div>
                                 </div>
