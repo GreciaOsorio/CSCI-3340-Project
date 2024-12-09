@@ -278,3 +278,26 @@ h1 {
     padding: 10px 15px;
     cursor: pointer;
 }
+
+.change-status-fr{
+    display: flex;
+    margin-left: 32%;
+}
+
+.select-status-bar{
+    width: 80%;
+    align-self: center;
+    padding: 6px;
+    margin-right: 6px;
+}
+
+.update-task-status-btn{
+    border: none;
+    background-color: transparent;
+    transition-duration: 0.3s;
+}
+
+.update-task-status-btn:hover{
+    color: #F7BB5B;
+    transform: scale(1.2);
+}
