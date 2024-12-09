@@ -29,6 +29,9 @@ We used several resources during the development of Cubby.
 
 #### 💡 Frontend Development
 - [**Bootstrap documentation**](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
+- [**Front-End-Tools**](https://front-end-tools.com/)
+- [**Awesome Fonts**](https://fontawesome.com/)
+- [**W3 Schools**](https://www.w3schools.com/)
 
 #### ⚙️ Backend Development
 - [**Django documentation**](https://docs.djangoproject.com/en/5.1/)
