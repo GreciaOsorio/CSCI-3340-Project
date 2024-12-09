@@ -37,7 +37,7 @@
                         </div>
                         <form method="POST" action="{% url 'update_project' project.id %}">
                             <div class="modal-body">
-                               ls {% csrf_token %}
+                            {% csrf_token %}
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Name</label>
                                     <input type="text" class="form-control" id="name" name="name" value="{{ project.p_name }}" required>
@@ -112,6 +112,7 @@
     <div class="teammate-filter">
         <select id="teammate-filter" class="form-control">
             <option value="all">All Teammates</option>
+            <option value="unassigned">Unassigned Tasks</option>
             {% for member in project_members %}
                 <option value="{{ member.id }}">{{ member.username }}</option>
             {% endfor %}
@@ -196,44 +197,47 @@
 
 
     <script>
+        // Script for teammate filtering amongst project tasks.
         $(document).ready(function() {
             $('#teammate-filter').on('change', function() {
                 const selectedTeammate = $(this).val();
-                console.log('Selected teammate:', selectedTeammate);  // Debug log
                 
-                // Show all tasks if "All Teammates" is selected
+                // If "All Teammates" is selected, show all cards.
                 if (selectedTeammate === 'all') {
                     $('.task-container').show();
                     return;
                 }
                 
-                // Hide all tasks first
+                // "All Teammates" was not selected, so what about the other options?
+                // First, we have to hide all cards, and THEN, we can choose which ones to display.
                 $('.task-container').hide();
                 
-                // Show tasks for selected teammate
+                // Show tasks for selected teammate.
                 $('.task-container').each(function() {
-                    const assigneeDiv = $(this).find('.card-task-assign');
-                    const assigneeText = assigneeDiv.text();
-                    const assigneeIds = assigneeDiv.data('assignee-ids');
+                    const taskDiv = $(this).find('.card-task-assign');
+                    const taskText = taskDiv.text();
+                    const assigneeIds = taskDiv.data('assignee-ids');
                     
-                    console.log('Task assignee IDs:', assigneeIds);  // Debug log
-                    console.log('Assignee text:', assigneeText);     // Debug log
-                    
-                    // Check if the task has any assignees
-                    if (assigneeText.includes('Unassigned')) {
+                    // Check if the task has any assignees.
+                    // If not, then display tasks that are unassigned.
+                    if (taskText.includes('Unassigned')) {
                         if (selectedTeammate === 'unassigned') {
                             $(this).show();
                         }
-                    } else {
-                        // Convert the selected teammate ID to a string for comparison
-                        const selectedTeammateStr = selectedTeammate.toString();
-                        
-                        // If assigneeIds is defined and not empty
+                    } 
+                    
+                    // Otherwise, a teammate was selected for filtering.
+                    else {
+                        // Prepare for comparison by turning id of the selected teammate into a string.
+                        const teammateId = selectedTeammate.toString();
+
+                        // If a teammate was selected . . .
                         if (assigneeIds) {
+                            // Split at the comma to identify each assignee in the list.
                             const taskAssignees = assigneeIds.toString().split(',');
-                            console.log('Task assignees array:', taskAssignees);  // Debug log
                             
-                            if (taskAssignees.includes(selectedTeammateStr)) {
+                            // If the selected teammate is included in the list of assignees, then display their card(s).
+                            if (taskAssignees.includes(teammateId)) {
                                 $(this).show();
                             }
                         }
