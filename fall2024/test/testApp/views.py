@@ -313,8 +313,11 @@ def delete_project_view(request, id):
         # Once deleted, return to the user's dashboard/project list page since current project has been deleted.
         return redirect('managerDash')
     
-    # Show deletion confirmation page.
-    return render(request, 'deleteProject.html', {'project': project})
+    # Show deletion confirmation modal/popup.
+    return render(request, 'projectDetail.html', {
+        'project': project,
+        'show_delete_modal': True
+    })
 
 @login_required
 def delete_task_view(request, id, t_id):
@@ -334,7 +337,12 @@ def delete_task_view(request, id, t_id):
         # Once deleted, return to the deleted task's project page.
         return redirect('project_detail', id=project.id)
     
-    return render(request, 'deleteTask.html', {'project': project, 'task': task})
+    # Show deletion confirmation modal/popup.
+    return render(request, 'projectDetail.html', {
+        'project': project,
+        'task': task,
+        'show_delete_modal': True
+    })
 
 # Unique to teammates (a.k.a project members, task assignees): can update the status of their assigned task(s).
 @login_required
